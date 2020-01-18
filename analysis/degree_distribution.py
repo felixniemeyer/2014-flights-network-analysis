@@ -17,8 +17,6 @@ for n, d in routes.degree():
 	if d > max_degree: 
 		max_degree = d
 
-print(degree_count)
-
 degrees = np.empty(max_degree + 1)
 nodes = np.empty(max_degree + 1)
 
@@ -30,4 +28,5 @@ for degree in range(0, max_degree + 1):
 		nodes[degree] = 0
 
 plt.plot(degrees, nodes)
+plt.savefig('./results/degree_distribution.png')
 plt.show()
