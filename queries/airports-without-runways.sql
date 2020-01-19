@@ -1,0 +1,15 @@
+SELECT 
+	COUNT(*) 
+FROM 
+(
+	SELECT 
+		icao
+	FROM 
+		airports
+	EXCEPT 
+	SELECT 
+		airport_ident
+	FROM 
+		runways
+)
+;

@@ -2,6 +2,8 @@ DROP TABLE IF EXISTS routes;
 DROP TABLE IF EXISTS airlines; 
 DROP TABLE IF EXISTS airports; 
 
+DROP TABLE IF EXISTS runways; 
+
 CREATE TABLE routes(
 	"airline"  TEXT,
 	"airline_id"  TEXT,
@@ -18,7 +20,7 @@ CREATE TABLE routes(
 .import data/routes.dat routes
 
 CREATE TABLE airports (
-	"airport_id" TEXT,
+	"airport_id" TEXT PRIMARY KEY,
 	"name" TEXT,
 	"city" TEXT,
 	"country" TEXT,
@@ -38,7 +40,7 @@ CREATE TABLE airports (
 .import data/airports.dat airports
 
 CREATE TABLE airlines ( 
-	"airline_id" TEXT,
+	"airline_id" TEXT PRIMARY KEY,
 	"name" TEXT,
 	"alias" TEXT,
 	"iata" TEXT,
@@ -50,4 +52,34 @@ CREATE TABLE airlines (
 
 .mode csv airlines
 .import data/airlines.dat airlines
+
+CREATE TABLE runways (
+	"runway_id" TEXT PRIMARY KEY, 
+	"airport_ref" TEXT,
+	"airport_ident" TEXT,
+	"length_ft" TEXT,
+	"width_ft" TEXT,
+	"surface" TEXT,
+	"lighted" TEXT,
+	"closed" TEXT,
+	"le_ident" TEXT,
+	"le_latitude_deg" TEXT,
+	"le_longitude_deg" TEXT,
+	"le_elevation_ft" TEXT,
+	"le_heading_degT" TEXT,
+	"le_displaced_threshold_ft" TEXT,
+	"he_ident" TEXT,
+	"he_latitude_deg" TEXT,
+	"he_longitude_deg" TEXT,
+	"he_elevation_ft" TEXT,
+	"he_heading_degT" TEXT,
+	"he_displaced_threshold_ft" TEXT
+); 
+
+.mode csv runways
+.import data/ourairports.com/runways.csv runways 
+DELETE FROM runways WHERE runway_id = 'id';
+
+ALTER TABLE airports ADD COLUMN runway_surface REAL; 
+
 
