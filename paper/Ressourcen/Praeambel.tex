@@ -1,0 +1,54 @@
+\documentclass[%
+    fontsize=11pt, % Schriftgröße
+    twoside=off % kein einseitiges Layout
+]{scrbook} % Dokumentenklasse: KOMA-Script Book
+\usepackage{scrlayer-scrpage} % Anpassbare Kopf- und Fußzeilen
+
+\usepackage[utf8]{inputenc} % Textkodierung: UTF-8
+\usepackage[T1]{fontenc} % Zeichensatzkodierung
+
+\usepackage[ngerman]{babel} % Deutsche Lokalisierung
+\usepackage{graphicx} % Grafiken
+
+% Schriftart Helvetica:
+\usepackage[scaled]{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+% Silbentrennung:
+\usepackage{hyphenat}
+\hyphenation{TUM in-te-res-siert} % Eigene Silbentrennung
+%\tolerance 2414
+%\hbadness 2414
+%\emergencystretch 1.5em
+%\hfuzz 0.3pt
+%\widowpenalty=10000     % Hurenkinder
+%\clubpenalty=10000      % Schusterjungen
+%\vfuzz \hfuzz
+
+\usepackage[hidelinks]{hyperref} % Hyperlinks
+\usepackage[onehalfspacing]{setspace} % 1,5facher Zeilenabstand
+\usepackage{calc} % Berechnungen
+\usepackage{enumitem} % Mehr Kontrolle über itemize-, enumerate- und description-Umgebungen
+\usepackage{relsize} % Schriftgröße in Abhängigkeit von aktueller anpassen
+\usepackage{tabularx} % Flexiblere Tabellen
+\usepackage{caption} % Anpassen von Beschriftungen
+
+% Nummerierung von Abbildungen & Tabellen durchgängig, statt nach Kapiteln:
+\usepackage{chngcntr}
+\counterwithout{figure}{chapter}
+\counterwithout{table}{chapter}
+
+% Abkürzungen, Glossare:
+\usepackage[%
+    xindy,% xindy zum Indexieren verwenden
+    acronym,% Separates Akronym-Verzeichnis
+    nopostdot,% Kein Punkt am Ende einer Beschreibung im Glossar
+]{glossaries}
+
+% Spezielle Befehlsdefinitionen:
+\newcommand{\Thema}{}
+
+% Debugging:
+%\usepackage{showframe} % Layout-Boxen anzeigen
+%\usepackage{layout} % Layout-Informationen
+%\usepackage{printlen} % Längenwerte ausgeben

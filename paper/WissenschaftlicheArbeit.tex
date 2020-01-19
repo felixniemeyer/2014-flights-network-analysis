@@ -1,0 +1,244 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% TUM-Vorlage: Wissenschaftliche Arbeit
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+% Rechteinhaber:
+%     Technische Universität München
+%     https://www.tum.de
+% 
+% Gestaltung:
+%     ediundsepp Gestaltungsgesellschaft, München
+%     http://www.ediundsepp.de
+% 
+% Technische Umsetzung:
+%     eWorks GmbH, Frankfurt am Main
+%     http://www.eworks.de
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{./Ressourcen/Praeambel.tex} % !!! NICHT ENTFERNEN !!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\renewcommand{\Thema}{%
+    Thema der Arbeit (optional)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\input{./Ressourcen/Anfang.tex} % !!! NICHT ENTFERNEN !!!
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+
+\title{Thema der Arbeit}
+\author{Martin Mustermann}
+\date{Datum}
+
+
+\tableofcontents % Inhaltsverzeichnis
+
+\chapter{Kapitelüberschrift}
+
+\section{Unterkapitelüberschrift}
+
+\subsection[]{Absatzüberschrift}
+
+Dies ist die Vorlage für eine wissenschaftliche Arbeit nach dem Corporate
+Design der Technischen Universität München (TUM). Die Vorlage ist für "`TeX
+Live 2015"' kompatibel.
+
+Bitte geben Sie Ihren individuellen Text an den vorgesehenen Stellen ein und
+beachten Sie die Formatvorgaben des jeweiligen Lehrstuhls oder der Prüfenden
+zum inhaltlichen und formalen Aufbau der wissenschaftlichen Arbeit. Achten Sie
+grundsätzlich auf ein angenehmes Erscheinungsbild für den Leser und dass ein
+1,5-facher Zeilenabstand und am Rand genügend Platz für Korrekturen
+eingehalten wird\footnote{Bitte beachten Sie die Zitationsvorgaben Ihres
+Prüfers.}.
+
+Grundsätzlich sind die Schriftarten Arial und Times New Roman, sowie die Neue
+Helvetica zulässig. Der Text ist links ausgerichtet und in Blocksatz gesetzt.
+Auszeichnungen der Schrift können durch Fettung, Schrägstellung und
+Unterstreichung erfolgen. Farbige Schrift sollte nur in Ausnahmefällen oder
+Grafiken zum Einsatz kommen.
+
+\begin{figure}[!ht]
+\noindent\hspace{0.5mm}\includegraphics[width=12cm]{./Ressourcen/Desert.jpg}
+\caption{Titel, Autor}
+\end{figure}
+
+\clearpage
+
+Passen Sie gegebenenfalls die Ränder an die Vorgaben Ihres Prüfers an und
+beachten Sie dabei, dass das Logo der TUM sich oben rechts innerhalb der
+Ränder, auf der Titelseite befindet. Für die Titelseiten stehen separate
+Vorlagen zur Verfügung.
+
+Zur Definition von \gls{abk} erstellen Sie für die gewünschte Abkürzung einen
+Eintrag in der Datei \texttt{Abkuerzungen.tex} und referenzieren sie ihn
+mittels \texttt{\textbackslash{}gls}; diese tauchen nach einem Lauf mit
+\texttt{latexmk} im Abkürzungsverzeichnis auf. Beispiel:
+
+\vspace{-\baselineskip}
+\begin{description}[leftmargin=1em+5mm, labelindent=5mm]
+\item[Definition in \texttt{Abkuerzungen.tex}:] \texttt{\textbackslash{}newacronym\{abk\}\{Abk.\}\{Abkürzungen\}\}}
+\item[Referenzierung:] \texttt{\textbackslash{}gls\{abk\}}
+\end{description}
+
+Für weitere Informationen zu Glossaren und Abkürzungen siehe die Dokumentation
+des Pakets \texttt{glossaries} und die entsprechenden Abschnitte in den
+Vorlagendateien.
+
+
+\subsection[]{Aufzählungen}
+
+\begin{itemize}
+\item Dies ist die Standardaufzählung
+    \begin{itemize}
+    \item Dies ist die nächste Ebene der Aufzählung
+    \end{itemize}
+\end{itemize}
+
+
+\subsection[]{Nummerierungen}
+
+\begin{enumerate}
+\item Erster Punkt der Nummerierungen
+    \begin{enumerate}
+    \item Unterpunkt der Nummerierungen
+    \end{enumerate}
+\end{enumerate}
+\clearpage
+
+\listoffigures % Abbildungsverzeichnis
+
+\printacronyms[title={Abkürzungsverzeichnis}] % Abkürzungsverzeichnis
+
+\listoftables % Tabellenverzeichnis
+
+\onehalfspacing
+
+\addchap{Tabellenvarianten}
+
+\vspace{22mm}
+\section*{Überschrift Tabelle 1}
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth + 5pt}{@{\hspace{3pt}} M | @{\hspace{3pt}} M}
+\multicolumn{2}{@{}X}{%
+    \begin{tabularx}{\textwidth}{@{\hspace{3pt}} M @{\hspace{14.5pt}} M}
+    \textbf{Spalte 1} & \textbf{Spalte 2}
+    \end{tabularx}%
+} \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+\end{tabularx}
+
+\caption{Beschreibung}
+\end{table}
+
+
+\vspace{\parskip}
+\section*{Überschrift Tabelle 2}
+
+\begin{table}[!h]
+\hspace{-5pt}
+\begin{tabularx}{\textwidth + 5pt}{| @{\hspace{3pt}} M | @{\hspace{3pt}} M |}
+\hline
+\textbf{Spalte 1} & \textbf{Spalte 2} \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+\end{tabularx}
+\caption{}
+\end{table}
+
+
+\vspace{\parskip}
+\section*{Überschrift Tabelle 3}
+
+\begin{table}[!h]
+\begin{tabularx}{\textwidth}{@{} M M}
+\textbf{Spalte 1} & \textbf{Spalte 2} \\
+Nummer 1 & Nummer 2 \\
+Nummer 1 & Nummer 2 \\
+Nummer 1 & Nummer 2 \\
+\end{tabularx}
+\caption{}
+\end{table}
+
+\clearpage
+
+\addchap{Tabellenvarianten 2}
+
+\vspace{22mm}
+\section*{Überschrift Tabelle 1}
+
+\begin{table}[!h]
+\fontsize{9pt}{13pt}\selectfont
+%\renewcommand{\arraystretch}{1.8}
+\hspace{-5pt}
+\begin{tabularx}{\textwidth + 5pt}{@{\hspace{3pt}} M | @{\hspace{3pt}} M}
+\multicolumn{2}{@{}X}{%
+    \begin{tabularx}{\textwidth}{@{\hspace{3pt}} M @{\hspace{14.5pt}} M}
+    \textbf{Spalte 1} & \textbf{Spalte 2}
+    \end{tabularx}%
+} \\
+\hline
+Nummer 1,\newline\,mehrzeilig in Schriftgröße 9 pt & Nummer 2 \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+\end{tabularx}
+
+\caption{}
+\end{table}
+
+
+\vspace{\parskip}
+\section*{Überschrift Tabelle 2}
+
+\begin{table}[!h]
+\fontsize{9pt}{13pt}\selectfont
+\hspace{-5pt}
+%\renewcommand{\arraystretch}{1.8}
+\begin{tabularx}{\textwidth + 5pt}{| @{\hspace{3pt}} M | @{\hspace{3pt}} M |}
+\hline
+\textbf{Spalte 1} & \textbf{Spalte 2} \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+Nummer 1 & Nummer 2 \\
+\hline
+\end{tabularx}
+\caption{}
+\end{table}
+
+
+\vspace{\parskip}
+\section*{Überschrift Tabelle 3}
+
+\begin{table}[!h]
+\fontsize{9pt}{13pt}\selectfont
+%\renewcommand{\arraystretch}{1.8}
+\begin{tabularx}{\textwidth}{@{} M M}
+\textbf{Spalte 1} & \textbf{Spalte 2} \\
+Nummer 1 & Nummer 2 \\
+Nummer 1 & Nummer 2 \\
+Nummer 1 & Nummer 2 \\
+\end{tabularx}
+\caption{}
+\end{table}
+
+\end{document}

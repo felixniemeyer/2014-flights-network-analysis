@@ -1,0 +1,229 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% EINSTELLUNGEN
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\KOMAoptions{parskip=full}
+
+
+% Seitenränder:
+
+\newcommand{\SeitenrandOben}{25.8mm}
+\newcommand{\SeitenrandRechts}{21mm}
+\newcommand{\SeitenrandLinks}{40mm}
+\newcommand{\SeitenrandUnten}{24.8mm}
+\newcommand{\FusszeileHoehe}{11.7mm}
+
+\usepackage[a4paper,
+    head=0pt,
+    top=\SeitenrandOben,
+    bottom=\SeitenrandUnten,
+    inner=\SeitenrandLinks,
+    outer=\SeitenrandRechts
+]{geometry}
+
+
+% Fußzeilen:
+
+\setlength{\footheight}{\FusszeileHoehe}
+\clearscrheadfoot
+\ifoot*{\Thema\vfill}
+\ofoot*{\pagemark\vfill}
+\setkomafont{pageheadfoot}{\fontsize{9pt}{13pt}\normalfont}
+\setkomafont{pagefoot}{\bfseries}
+\setkomafont{pagenumber}{\normalfont}
+\pagestyle{scrheadings}
+
+
+% Fußnoten:
+
+\KOMAoptions{%
+    footnotes=multiple % mehrere Fußnoten werden durch Zeichen getrennt
+}
+%\setfootnoterule[.6pt]{5.08cm}
+\renewcommand{\footnoterule}{\hrule width 5.08cm height .6pt \vspace*{3.9mm}}
+%\setlength{\footnotesep}{5mm}
+\deffootnote{2mm}{2mm}{%
+    \makebox[2mm][l]{\textsuperscript{\thefootnotemark}}%
+}
+\setkomafont{footnoterule}{\fontsize{9pt}{20pt}\selectfont}
+
+
+% Überschriften:
+
+\KOMAoptions{%
+    open=any, % keine Festlegung auf linke oder rechte Seite
+    numbers=noendperiod, % kein automatischer Punkt nach Gliederungsnummer
+    headings=small
+}
+
+\makeatletter
+\g@addto@macro{\@afterheading}{\vspace{-\parskip}} % \parskip nach Gliederungsbefehlen entfernen
+\renewcommand*{\chapterheadstartvskip}{\vspace{\@tempskipa}\vspace{-3pt}} % Korrektur für Abstand über Kapitelüberschriften
+\makeatother
+
+\setkomafont{disposition}{\normalfont\sffamily}
+
+\setkomafont{chapter}{\normalfont\fontsize{19pt}{22pt}\selectfont}
+\RedeclareSectionCommand[%
+  beforeskip=0pt,
+  afterskip=29pt
+]{chapter}
+\renewcommand*{\chapterformat}{\thechapter.\enskip} % Immer Punkt nach Kapitelnummer
+
+\setkomafont{section}{\fontsize{15pt}{17pt}\selectfont}
+\RedeclareSectionCommand[%
+  beforeskip=0pt,
+  afterskip=24.1pt
+]{section}
+\renewcommand*{\sectionformat}{\makebox[13mm][l]{\thesection.\enskip}} % Feste Breite für Abschnittsnummer und immer Punkt danach
+
+\setkomafont{subsection}{\bfseries\fontsize{12pt}{13pt}\selectfont}
+\RedeclareSectionCommand[%
+  beforeskip=0pt,
+  afterskip=1pt
+]{subsection}
+\renewcommand*{\subsectionformat}{\makebox[13mm][l]{\thesubsection.\enskip}} % Feste Breite für Unterabschnittsnummer und immer Punkt danach
+
+
+% Listen:
+
+\setlist{%
+    labelsep=0mm,
+    itemindent=0pt,
+    labelindent=0pt,
+    align=left,
+    parsep=1.5ex
+}
+\setlist[itemize]{%
+    leftmargin=5mm,
+    labelwidth=4.9mm
+}
+\setlist[itemize,1]{%
+    before={\vspace{0.25ex}},
+    label={\raisebox{.35ex}{\smaller[2]\textbullet}},
+    after={\vspace{-\parsep}\vspace{-.25ex}}
+}
+\setlist[itemize,2]{%
+    label={\raisebox{.35ex}{\rule{.58ex}{.58ex}}}
+}
+\setlist[enumerate]{%
+    leftmargin=10mm,
+    labelwidth=9.9mm
+}
+\setlist[enumerate,2]{%
+    label={\alph*.}
+}
+
+\setlist[description]{%
+%    labelindent=!,
+    leftmargin=1em,
+    labelwidth=!,
+    parsep=0mm,
+    partopsep=0mm,
+    labelsep=1em,
+}
+
+
+% Verzeichnisse:
+
+\KOMAoptions{%
+    toc=flat, % keine Einrückungen im Inhaltsverzeichnis
+    toc=chapterentrydotfill, % Punkte bis zur Seitennummer bei Kapiteln
+    listof=entryprefix, % Präfix für Einträge in Abbildungs- und Tabellenverzeichnis
+    listof=nochaptergap, % Kein Abstand für Kapiteleinträge in extra Verzeichnissen
+}
+
+\makeatletter
+\renewcommand{\@dotsep}{.3} % Abstand der Füllpunkte
+
+% "chapteratlist" für Inhaltsverzeichnis auswerten:
+\renewcommand*{\addchaptertocentry}[2]{%
+  \iftocfeature{toc}{chapteratlist}{}{%
+    \addtocontents{toc}{\protect\vspace{-10pt}}% extra Abstand vor Kapitelüberschriften in Inhaltsverzeichnis entfernen
+  }%
+  % Originaldefinition aus scrbook.cls:
+  \addtocentrydefault{chapter}{#1}{#2}%
+  \if@chaptertolists
+    \doforeachtocfile{%
+      \iftocfeature{\@currext}{chapteratlist}{%
+        \addxcontentsline{\@currext}{chapteratlist}[{#1}]{#2}%
+      }{}%
+    }%
+    \@ifundefined{float@addtolists}{}{\scr@float@addtolists@warning}%
+  \fi%
+}
+\makeatother
+
+\AfterTOCHead[toc]{\protect\vspace{.8ex}} % Abstand zwischen Überschrift und Inhaltsverzeichnis
+\setuptoc{toc}{noparskipfake} % Angleichung der Abstände nach Inhaltsverzeichnisüberschrift an andere Überschriften
+\unsettoc{toc}{chapteratlist} % kein Abstand vor Kapiteleinträgen im Inhaltsverzeichnis, funktioniert nur durch obige Redefinition von \addchaptertocentry
+
+% -- Abbildungs- und Tabellenverzeichnis:
+
+\AfterTOCHead[lof]{\protect\vspace{-.1ex}\doublespacing} % Abstand zwischen Überschrift und Abbildungsverzeichnis, doppelter Zeilenabstand
+\setuptoc{lof}{noparskipfake} % Angleichung der Abstände nach Abbildungsverzeichnisüberschrift an andere Überschriften
+
+\AfterTOCHead[lot]{\protect\vspace{-.1ex}\doublespacing} % Abstand zwischen Überschrift und Tabellenverzeichnis, doppelter Zeilenabstand
+\setuptoc{lot}{noparskipfake} % Angleichung der Abstände nach Tabellenverzeichnisüberschrift an andere Überschriften
+
+% Beschriftungen:
+\DeclareCaptionFormat{WissenschaftlicheArbeiten}{\fontsize{8pt}{10pt}\selectfont#1 #2#3\par}
+\DeclareCaptionLabelFormat{WissenschaftlicheArbeiten}{\bfseries\selectfont#1 #2}
+
+% -- Tabellen:
+\captionsetup[table]{%
+    format=WissenschaftlicheArbeiten,
+    labelformat=WissenschaftlicheArbeiten,
+    labelsep=none,
+    singlelinecheck=off,
+    justification=raggedright,
+    skip=3pt,
+    tablewithin=none
+}
+
+% -- Abbildungen:
+\captionsetup[figure]{%
+    format=WissenschaftlicheArbeiten,
+    labelformat=WissenschaftlicheArbeiten,
+    labelsep=none,
+    singlelinecheck=off,
+    justification=raggedright,
+    skip=6.6mm,
+    figurewithin=none
+}
+
+
+% Tabellen:
+\renewcommand{\arraystretch}{1.8} % Skalierung der Tabellen
+\newcolumntype{M}{X<{\vspace{4pt}}} % Spaltentyp mit Abstand rechts
+
+
+% Glossare & Abkürzungsverzeichnis:
+
+\makeglossaries
+\input{Abkuerzungen}
+\setacronymstyle{short-long}
+
+\makeatletter
+\newlength{\@glsdotsep}
+\setlength{\@glsdotsep}{\@dotsep em}
+\newcommand*{\glsdotfill}{\leavevmode \cleaders \hb@xt@ \@glsdotsep{\hss .\hss }\hfill \kern \z@}
+\makeatother
+
+\newglossarystyle{WissenschaftlicheArbeiten}{%
+  \setglossarystyle{index}%
+
+  \renewcommand*{\glossaryheader}{\vspace{.75em}}%
+  \renewcommand*{\glstreenamefmt}[1]{##1}%
+  \renewcommand*{\glossentry}[2]{%
+     \item\glsentryitem{##1}\glstreenamefmt{\glstarget{##1}{\glossentryname{##1}}}%
+     \ifglshassymbol{##1}{\space(\glossentrysymbol{##1})}{}%
+     \space-\space\glossentrydesc{##1}\glsdotfill\glspostdescription\space ##2%
+  }%
+  \renewcommand*{\glsgroupheading}[1]{%
+    \item\glstreenamefmt{\textbf{\fontsize{14}{17}\selectfont\enskip\glsgetgrouptitle{##1}}}\vspace{.3em}}%
+}
+
+\setglossarystyle{WissenschaftlicheArbeiten}
+
+
