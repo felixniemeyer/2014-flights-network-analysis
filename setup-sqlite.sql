@@ -131,6 +131,10 @@ DROP TABLE temp_runways;
 /* patronage */
 /*-----------*/
 
+DROP TABLE IF EXISTS temp_patronage;
+DROP TABLE IF EXISTS patronage_lower_threshold;
+DROP TABLE IF EXISTS patronage_runway_surface_ratio;
+
 CREATE TABLE temp_patronage (
 	icao TEXT PRIMARY KEY, 
 	patronage REAL
@@ -165,8 +169,8 @@ FROM (
 	FROM 
 		airports 
 	WHERE
-		patronage <> '' AND
-		patronage <> '0'
+		patronage is not null AND
+		patronage > 0
 	ORDER BY patronage asc
 	LIMIT (SELECT count(*) / 100 FROM airports) )
 ;
@@ -177,30 +181,29 @@ SELECT
 FROM 
 	airports 
 WHERE
-	runway_surface <> '' AND
-	patronage <> ''
+	runway_surface is not null AND
+	patronage is not null
 ;
 
 UPDATE 
 	airports 
 SET
-	patronage = airports.runway_surface * (
+	patronage = runway_surface * (
 		SELECT * FROM patronage_runway_surface_ratio
 	) 
 WHERE
-	patronage = '' AND
-	runway_surface <> ''
+	patronage is null AND
+	runway_surface is not null
 ;
 
 DROP TABLE patronage_runway_surface_ratio;
-
 
 UPDATE 
 	airports 
 SET
 	patronage = ( SELECT * FROM patronage_lower_threshold ) 
 WHERE
-	patronage = '' OR
+	patronage is null OR
 	patronage < ( SELECT * FROM patronage_lower_threshold ) 
 ;
 
