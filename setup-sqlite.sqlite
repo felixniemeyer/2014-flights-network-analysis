@@ -1,7 +1,11 @@
+
+/*-------------------------*/
+/* import openflights data */
+/*-------------------------*/
+
 DROP TABLE IF EXISTS routes; 
 DROP TABLE IF EXISTS airlines; 
 DROP TABLE IF EXISTS airports; 
-
 DROP TABLE IF EXISTS runways; 
 
 CREATE TABLE routes(
@@ -53,7 +57,11 @@ CREATE TABLE airlines (
 .mode csv airlines
 .import data/airlines.dat airlines
 
-CREATE TABLE runways (
+/*---------------------*/
+/* runway surface data */
+/*---------------------*/
+
+CREATE TABLE temp_runways (
 	"runway_id" TEXT PRIMARY KEY, 
 	"airport_ref" TEXT,
 	"airport_ident" TEXT,
@@ -76,10 +84,75 @@ CREATE TABLE runways (
 	"he_displaced_threshold_ft" TEXT
 ); 
 
-.mode csv runways
-.import data/ourairports.com/runways.csv runways 
-DELETE FROM runways WHERE runway_id = 'id';
+.mode csv temp_runways
+.import data/ourairports.com/runways.csv temp_runways 
+DELETE FROM temp_runways WHERE runway_id = 'id';
 
 ALTER TABLE airports ADD COLUMN runway_surface REAL; 
 
+CREATE TABLE temp_airport_runway_surfaces AS
+SELECT 
+	a.icao, 
+	s.surface_area_ft2
+FROM 
+	airports as a, 
+	(
+		SELECT 
+			UPPER(airport_ident) as icao, 
+			SUM((cast(length_ft as integer) * cast(width_ft as integer))) as surface_area_ft2
+		FROM 
+			temp_runways
+		WHERE 
+			cast(length_ft as integer) > 20 * cast(width_ft as integer)
+		GROUP BY airport_ident
+	) as s
+WHERE
+	a.icao = s.icao
+ORDER BY s.surface_area_ft2
+;
 
+UPDATE 
+	airports as a
+SET
+	runway_surface = (
+		SELECT
+			surface_area_ft2
+		FROM 
+			temp_airport_runway_surfaces as s
+		WHERE
+			a.icao = s.icao
+	)
+;
+	
+DROP TABLE temp_airport_runway_surfaces; 
+
+DROP TABLE temp_runways;
+
+/*-----------*/
+/* patronage */
+/*-----------*/
+
+CREATE TABLE temp_patronage (
+	icao TEXT PRIMARY KEY, 
+	patronage REAL
+);
+
+.mode csv temp_patronage
+.import data/estimation_enriched_2014_patronage.csv temp_patronage
+
+ALTER TABLE airports ADD COLUMN patronage REAL; 
+
+UPDATE
+	airports as a
+SET 
+	patronage = (
+		SELECT
+			patronage
+		FROM 
+			temp_patronage as p
+		WHERE
+			a.icao = p.icao
+	)
+; 
+
+DROP TABLE temp_patronage;
