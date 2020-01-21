@@ -1,4 +1,3 @@
-
 /*-------------------------*/
 /* import openflights data */
 /*-------------------------*/
@@ -112,7 +111,7 @@ ORDER BY s.surface_area_ft2
 ;
 
 UPDATE 
-	airports as a
+	airports 
 SET
 	runway_surface = (
 		SELECT
@@ -120,7 +119,7 @@ SET
 		FROM 
 			temp_airport_runway_surfaces as s
 		WHERE
-			a.icao = s.icao
+			airports.icao = s.icao
 	)
 ;
 	
@@ -143,7 +142,7 @@ CREATE TABLE temp_patronage (
 ALTER TABLE airports ADD COLUMN patronage REAL; 
 
 UPDATE
-	airports as a
+	airports 
 SET 
 	patronage = (
 		SELECT
@@ -151,7 +150,7 @@ SET
 		FROM 
 			temp_patronage as p
 		WHERE
-			a.icao = p.icao
+			airports.icao = p.icao
 	)
 ; 
 
@@ -183,9 +182,9 @@ WHERE
 ;
 
 UPDATE 
-	airports as a
+	airports 
 SET
-	patronage = a.runway_surface * (
+	patronage = airports.runway_surface * (
 		SELECT * FROM patronage_runway_surface_ratio
 	) 
 WHERE
@@ -197,7 +196,7 @@ DROP TABLE patronage_runway_surface_ratio;
 
 
 UPDATE 
-	airports as a
+	airports 
 SET
 	patronage = ( SELECT * FROM patronage_lower_threshold ) 
 WHERE
