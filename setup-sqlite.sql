@@ -156,3 +156,53 @@ SET
 ; 
 
 DROP TABLE temp_patronage;
+
+CREATE TABLE patronage_lower_threshold AS
+SELECT 
+	avg( cast(patronage as REAL) ) 
+FROM (
+	SELECT 
+		patronage
+	FROM 
+		airports 
+	WHERE
+		patronage <> '' AND
+		patronage <> '0'
+	ORDER BY patronage asc
+	LIMIT (SELECT count(*) / 100 FROM airports) )
+;
+
+CREATE TABLE patronage_runway_surface_ratio AS 
+SELECT 
+	avg( cast(patronage as REAL) / cast(runway_surface as REAL) ) 
+FROM 
+	airports 
+WHERE
+	runway_surface <> '' AND
+	patronage <> ''
+;
+
+UPDATE 
+	airports as a
+SET
+	patronage = a.runway_surface * (
+		SELECT * FROM patronage_runway_surface_ratio
+	) 
+WHERE
+	patronage = '' AND
+	runway_surface <> ''
+;
+
+DROP TABLE patronage_runway_surface_ratio;
+
+
+UPDATE 
+	airports as a
+SET
+	patronage = ( SELECT * FROM patronage_lower_threshold ) 
+WHERE
+	patronage = '' OR
+	patronage < ( SELECT * FROM patronage_lower_threshold ) 
+;
+
+DROP TABLE patronage_lower_threshold;
