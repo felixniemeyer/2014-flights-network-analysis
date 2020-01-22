@@ -12,10 +12,6 @@ place them in ```./data```
 put it in ```./data/ourairports.com/runways.csv```
 
 #### get patronage data from wikidata
-clone this repository
-[https://github.com/felixniemeyer/airport-patronage-collector]
-into ```./airport-patronage```
-
 Go to [https://query.wikidata.org] and execute the query from ```./airport-patronage/sparql-queries/get-all-airports-with-patronage-values.sparql```
 Click on "Download", "CSV File" and save it as ```./airport-patronage/wikidata-airport-patronage.csv```
 
