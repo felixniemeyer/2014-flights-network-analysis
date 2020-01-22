@@ -12,13 +12,13 @@ place them in ```./data```
 put it in ```./data/ourairports.com/runways.csv```
 
 #### get patronage data from wikidata
-use the script from this repository
+clone this repository
 [https://github.com/felixniemeyer/airport-patronage-collector]
+into ```./airport-patronage```
 
-put the .csv with estimation enriched year-2014-values into 
-```./data/estimation_enriched_2014_patronage.csv```
+Go to [https://query.wikidata.org] and execute the query from ```./airport-patronage/sparql-queries/get-all-airports-with-patronage-values.sparql```
+Click on "Download", "CSV File" and save it as ```./airport-patronage/wikidata-airport-patronage.csv```
 
 ### Set up the sqlite database
-```sqlite3 db.db < setup-sqlite.sqlite```
-
+run ```./setup-db.sh```
 
