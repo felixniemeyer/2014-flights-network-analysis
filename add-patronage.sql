@@ -8,13 +8,13 @@ DROP TABLE IF EXISTS patronage_runway_surface_ratio;
 
 CREATE TABLE temp_patronage (
 	icao TEXT PRIMARY KEY, 
-	patronage REAL
+	patronage INT
 );
 
 .mode csv temp_patronage
 .import data/estimation_enriched_2014_patronage.csv temp_patronage
 
-ALTER TABLE airports ADD COLUMN patronage REAL; 
+ALTER TABLE airports ADD COLUMN patronage INT; 
 
 UPDATE
 	airports 
@@ -33,7 +33,7 @@ DROP TABLE temp_patronage;
 
 CREATE TABLE patronage_lower_threshold AS
 SELECT 
-	avg( cast(patronage as REAL) ) 
+	avg( patronage )
 FROM (
 	SELECT 
 		patronage
@@ -48,7 +48,7 @@ FROM (
 
 CREATE TABLE patronage_runway_surface_ratio AS 
 SELECT 
-	avg( cast(patronage as REAL) / cast(runway_surface as REAL) ) 
+	avg( cast(patronage as REAL) / cast(runway_surface as REAL) )
 FROM 
 	airports 
 WHERE
@@ -59,9 +59,9 @@ WHERE
 UPDATE 
 	airports 
 SET
-	patronage = runway_surface * (
+	patronage = cast( runway_surface * (
 		SELECT * FROM patronage_runway_surface_ratio
-	) 
+	) as int)
 WHERE
 	patronage is null AND
 	runway_surface is not null

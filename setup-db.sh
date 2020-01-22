@@ -9,7 +9,7 @@ sqlite3 db.db < ./list-airports.sql > ./airport-patronage/custom_airport_ids
 
 echo "lalala"  
 pushd ./airport-patronage
-ls
+
 node ./extract-yearly-patronage.js
 node ./estimate-2014-patronage.js
 

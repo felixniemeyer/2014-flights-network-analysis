@@ -29,7 +29,7 @@ CREATE TABLE temp_runways (
 .import data/ourairports.com/runways.csv temp_runways 
 DELETE FROM temp_runways WHERE runway_id = 'id';
 
-ALTER TABLE airports ADD COLUMN runway_surface REAL; 
+ALTER TABLE airports ADD COLUMN runway_surface INT; 
 
 CREATE TABLE temp_airport_runway_surfaces AS
 SELECT 
@@ -40,11 +40,11 @@ FROM
 	(
 		SELECT 
 			UPPER(airport_ident) as icao, 
-			SUM((cast(length_ft as integer) * cast(width_ft as integer))) as surface_area_ft2
+			SUM((cast(length_ft as INT) * cast(width_ft as INT))) as surface_area_ft2
 		FROM 
 			temp_runways
 		WHERE 
-			cast(length_ft as integer) > 20 * cast(width_ft as integer)
+			cast(length_ft as INT) > 20 * cast(width_ft as INT)
 		GROUP BY airport_ident
 	) as s
 WHERE
