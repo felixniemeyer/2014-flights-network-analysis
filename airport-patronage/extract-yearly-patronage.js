@@ -46,9 +46,6 @@ function run() {
       let [iata, icao, patronage, point_in_time] = line.split(",")
       patronage = parseInt(patronage) 
       let id = id_lookup.by_iata[iata] || id_lookup.by_icao[icao]
-      if(id === '7266') {
-        console.log('7266', iata, icao, patronage, point_in_time)
-      }
       if(id !== undefined && patronage > 0) {
         if(id !== currentId) {
           if(airport_data !== undefined) {

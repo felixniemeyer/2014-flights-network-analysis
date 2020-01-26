@@ -15,7 +15,6 @@ rl.createInterface({ input: fs.createReadStream(source_file) })
     if(header) {
       header = false
       column_names = row
-      console.log('header', column_names)
       return 
     }
     let complete = true
@@ -37,7 +36,6 @@ rl.createInterface({ input: fs.createReadStream(source_file) })
     let patronage_avg = patronage_sum.map(sum => sum / complete_row_count)
     let i_2014 = column_names.indexOf('2014')
     let predict_from_other_year_factor = patronage_avg.map(avg => patronage_avg[i_2014] / avg)
-    console.log('predicting based on other years with factors', predict_from_other_year_factor)
     header = true
     ws = fs.createWriteStream(out_file) 
     rl.createInterface({ input: fs.createReadStream(source_file) })
@@ -46,9 +44,6 @@ rl.createInterface({ input: fs.createReadStream(source_file) })
         if(header) {
           header = false
           return 
-        }
-        if(row[0] == 'KFOE') {
-          console.log('nan for row', row)
         }
         if(row[i_2014] === 'unavailable') {
           let other_years = 0
