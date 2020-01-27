@@ -4,14 +4,14 @@ import numpy as np
 import math
 import scipy.optimize
 
-from network_loader import loadNetwork
+import network_loader 
 
-routes = loadNetwork()
+network = network_loader.load()
 
 degree_counts = {}
 max_degree = 0
 
-for n, d in routes.degree():
+for n, d in network.degree():
 	try:
 		degree_counts[d] += 1
 	except:
