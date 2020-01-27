@@ -31,7 +31,7 @@ printf "removing duplicate routes (source, destination, airline)...\n"
 sqlite3 "$DB_FILE" < ./queries/remove-duplicate-connections-by-same-airline.sql
 
 printf "calculating geographic distance...\n" 
-python ./scripts/calculate-geo-distance-and-store-in-db.py "$DB_FILE"
+python ./scripts/calculate-geo-distance.py "$DB_FILE"
 
 printf "adding geo_distance column...\n"
 sqlite3 "$DB_FILE" < ./queries/set-up-geo-distance.sql
