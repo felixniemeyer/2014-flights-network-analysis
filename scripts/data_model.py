@@ -56,18 +56,26 @@ class Airport:
 		self.in_routes = []
 		self.out_routes = []
 		self.flow_deviation = 0
+		self.flow_sum = 0
 		self.degree = 0
 		# references for the heap
 		self.l = None
 		self.r = None
 		self.p = None
 
-	def recalc_flow_deviation(self): 
+	def recalc_flow_sum(self): 
 		routes = self.in_routes + self.out_routes
-		flow_sum = 0
+		self.flow_sum = 0
 		for route in routes: 
-			flow_sum += route.flow
-		self.flow_deviation = math.log(flow_sum/self.patronage)
+			self.flow_sum += route.flow
+		print('new flow sum', self.flow_sum)
+
+	def recalc_flow_sum_and_deviation(self): 
+		self.recalc_flow_sum()
+		self.recalc_flow_deviation()
+	
+	def recalc_flow_deviation(self): 
+		self.flow_deviation = math.log(self.flow_sum/self.patronage)
 
 	def bubble(self):
 		# print('bubbling\n', self, self.l, self.r)
@@ -81,7 +89,7 @@ class Airport:
 				self.bubble_up()
 			else:
 				self.p.switch(False) 
-				self.bubbleUp()
+				self.bubble_up()
 
 	def bubble_down(self):
 		if self.l.better_than(self.r): 
@@ -140,7 +148,7 @@ class Airport:
 		return abs(self.flow_deviation) < abs(other.flow_deviation)
 
 	def __repr__(self): 
-		return "%s\nflow_deviation: %f\n" % ( self.name, self.flow_deviation ) 
+		return "%s: %s\nflow_deviation: %f\n" % ( self.airport_id, self.name, self.flow_deviation ) 
 
 
 class Airline: 
