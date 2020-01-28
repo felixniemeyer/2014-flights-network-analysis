@@ -37,4 +37,13 @@ printf "adding geo_distance column...\n"
 sqlite3 "$DB_FILE" < ./queries/set-up-geo-distance.sql
 rm ./temp_geo_distances.csv
 
+printf "estimating edge flows"
+python ./scripts/estimate-passenger-flows.py write_csv "$DB_FILE"
+
+printf "adding passenger flows"
+sqlite3 "$DB_FILE" < ./queries/set-up-passenger-flows.sql
+rm ./temp_passenger_flows.csv
+rm ./temp_airport_flow_deviation.csv
+
 printf "\ndone, enjoy.\n\n" 
+

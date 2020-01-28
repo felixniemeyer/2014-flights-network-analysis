@@ -31,7 +31,7 @@ pyplot.plot(degrees, nodes)
 pyplot.title('whole network degree distribution (multiple edges possible)')
 pyplot.xlabel('degree')
 pyplot.ylabel('number of nodes')
-pyplot.savefig('./results/degree_distribution.png')
+pyplot.savefig('./results/degree_distribution.png', dpi=300)
 
 pyplot.show()
 

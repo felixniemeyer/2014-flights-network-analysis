@@ -5,8 +5,8 @@ import geopy.distance
 import local_config 
 from data_model import Route, Airport, Airline 
 
-def load():
-	db_conn = sqlite3.connect(local_config.db_file)
+def load(db_file=local_config.db_file):
+	db_conn = sqlite3.connect(db_file)
 	db_cursor = db_conn.cursor()
 
 	airport_columns = [

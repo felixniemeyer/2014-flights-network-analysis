@@ -55,7 +55,6 @@ plt.plot(mx, my, color='orange')
 plt.title('whole network degree distribution (multiple edges possible)')
 plt.xlabel('degree')
 plt.ylabel('number of nodes')
-plt.savefig('./results/degree_distribution.png')
 
 plt.xscale('log')
 plt.yscale('log')
@@ -67,5 +66,6 @@ labels = [
 ]
 plt.legend(labels, loc=1)
 
+plt.savefig('./results/degree_distribution_curve_manual.png', dpi=300)
 plt.show()
 
