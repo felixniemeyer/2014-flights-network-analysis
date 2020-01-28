@@ -4,8 +4,8 @@ import networkx as nx
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-from IPython.display import display, Markdown
-from mpl_toolkits.mplot3d import Axes3D
+#from IPython.display import display, Markdown
+#from mpl_toolkits.mplot3d import Axes3D
 
 options = {
     'node_color': 'lavender',
