@@ -1,0 +1,20 @@
+SELECT ?iata ?icao ?patronage ?point_in_time 
+WHERE {
+	SERVICE wikibase:label { bd:serviceParam wikibase:language "[AUTO_LANGUAGE],en". }
+	VALUES ?airport_classes { wd:Q1248784 wd:Q62447 wd:Q644371 }
+	?airport wdt:P31 ?airport_classes.
+	?airport p:P3872 ?patronage_statement.
+	?patronage_statement ps:P3872 ?patronage.
+	?patronage_statement pq:P585 ?point_in_time.
+	OPTIONAL { 
+		?airport p:P239 ?icao_statement. 
+		?icao_statement ps:P239 ?icao.
+	} 
+	OPTIONAL {
+		?airport p:P238 ?iata_statement. 
+		?iata_statement ps:P238 ?iata. 
+	}
+    FILTER ( YEAR(?point_in_time) < 2018 && YEAR(?point_in_time) > 2010 )
+    FILTER ( BOUND(?icao) || BOUND(?iata) )
+}
+ORDER BY ?icao ?iata 

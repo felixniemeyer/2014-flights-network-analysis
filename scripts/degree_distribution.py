@@ -1,15 +1,15 @@
 import collections
-import matplotlib.pyplot as plt 
+from matplotlib import pyplot
 import numpy as np
 
-from network_loader import loadNetwork
+# local modules
+import network_loader
 
-routes = loadNetwork()
+network = network_loader.load()
 
 degree_count = {}
 max_degree = 0
-
-for n, d in routes.degree():
+for n, d in network.degree():
 	try:
 		degree_count[d] += 1
 	except:
@@ -27,6 +27,11 @@ for degree in range(0, max_degree + 1):
 	except:
 		nodes[degree] = 0
 
-plt.plot(degrees, nodes)
-plt.savefig('./results/degree_distribution.png')
-plt.show()
+pyplot.plot(degrees, nodes)
+pyplot.title('whole network degree distribution (multiple edges possible)')
+pyplot.xlabel('degree')
+pyplot.ylabel('number of nodes')
+pyplot.savefig('./results/degree_distribution.png', dpi=300)
+
+pyplot.show()
+
