@@ -1,0 +1,29 @@
+Wild ideas: 
+- World coverage. what geographic surface of the world is covered by an airline
+
+Jobs: 
+- Investigate how outlier airports regarding flow_deviation appear in big airlines networks
+- It would be nice to know, how many unconnected subgraphs exist
+
+Analysis
+	Numeric airline characteristics: 
+		Longest path airport [steps, km]
+		Connection length [km]
+		  - Total 
+		  - Average 
+		connection length [km] * passenger flow [passenger]
+		  - Total 
+		  - Average
+		cluster coefficient avg
+
+	Airline distributions (all per node): 
+		centrality
+		degree
+		passenger weighted degree
+		profit weighted degree
+		cluster coefficient
+
+Predictions / Question&Answers
+	
+
+Alliance forming algorithm => compare it to real alliances. 
