@@ -26,11 +26,11 @@ class Airport:
 		self.flow_deviation = 0
 		self.flow_sum = 0
 		self.degree = 0
+		self.airline_degree = {}
 
 	def recalc_flow_sum(self): 
-		routes = self.in_routes + self.out_routes
 		self.flow_sum = 0
-		for route in routes: 
+		for route in self.get_routes(): 
 			self.flow_sum += route.flow
 
 	def recalc_flow_sum_and_deviation(self): 
@@ -39,6 +39,9 @@ class Airport:
 	
 	def recalc_flow_deviation(self): 
 		self.flow_deviation = math.log(self.flow_sum/self.patronage)
+	
+	def get_routes(self): 
+		return self.in_routes + self.out_routes
 
 	def __repr__(self): 
 		return "%s: %s\nflow_deviation: %f\n" % ( self.airport_id, self.name, self.flow_deviation ) 

@@ -1,4 +1,5 @@
 import math
+from functools import reduce
 from queue import PriorityQueue
 from matplotlib import pyplot
 import numpy
@@ -18,11 +19,36 @@ def run(db_file):
 
 	for i, airport in airports.items(): 
 		airport.degree = len(airport.in_routes) + len(airport.out_routes)
+		for route in airport.get_routes(): 
+			alid = route.airline.airline_id
+			try: 
+				airport.airline_degree[alid] += 1
+			except: 
+				airport.airline_degree[alid] = 1
 
-	for route in routes: 
-		a = route.destination_airport.patronage / route.destination_airport.degree
-		b = route.source_airport.patronage / route.source_airport.degree
-		route.flow = math.sqrt(a * b) 
+	for i, route in enumerate(routes): 
+		sa = route.source_airport
+		da = route.destination_airport
+		total_flow = math.sqrt(da.patronage / da.degree * sa.patronage / sa.degree) 
+
+		share_sum = 0
+		this_share = 0
+		count = 0
+		for r in sa.out_routes: 
+			if r.destination_airport == da: 
+				count += 1
+				alid = r.airline.airline_id
+				share = math.sqrt(
+					r.source_airport.airline_degree[alid] * 
+					r.destination_airport.airline_degree[alid]
+				)
+				share_sum += share
+				if r == route: 
+					this_share = share
+		route.flow = total_flow * this_share * count / share_sum
+
+		sys.stdout.write("\rinitializing {0:.1f}%".format(100 * i / len(routes)))
+	sys.stdout.write("\rinitializing 100%   \n")
 
 	for i, airport in airports.items(): 
 		airport.recalc_flow_sum_and_deviation()
@@ -31,11 +57,10 @@ def run(db_file):
 		min_max_sum = plot_flow_deviation_distribution(airports)
 		labels = ["initial. min, max, sum: [{0:.2f}, {1:.2f}, {2:.2f}]".format(*min_max_sum)]
 
-	iterations = 300
-	plot_each = (iterations - 1) / 6
-	last_plot = 0
+	iterations = 120
+	plot_each = iterations / 12
+	last_plot = -1
 	factor = math.pow(0.9, 1 / iterations) 
-	print(factor) 
 	p = 0
 	for iteration in range(0, iterations):
 		for i, airport in airports.items():
@@ -51,25 +76,25 @@ def run(db_file):
 		for i, airport in airports.items():
 			airport.recalc_flow_sum_and_deviation()
 		
-		if iteration - last_plot > plot_each : 
-			last_plot = iteration
+		if iteration - last_plot >= plot_each: 
+			last_plot = iteration 
 			
 			if plot_figure:
 				min_max_sum = plot_flow_deviation_distribution(airports)
 				label_template = "iteration {3}. min, max, sum(abs): [{0:.2f}, {1:.2f}, {2:.2f}]"
-				labels.append(label_template.format(*min_max_sum, iteration))
+				labels.append(label_template.format(*min_max_sum, iteration + 1))
 
-		sys.stdout.write("\r{0:.1f}%".format(100 * (iteration / iterations)))
+		sys.stdout.write("\riterating {0:.1f}%".format(100 * (iteration / iterations)))
 
 		p = 1 - (1 - p) * factor
 
-	sys.stdout.write("\r100%\n")
+	sys.stdout.write("\riterating 100%   \n")
 
 	if plot_figure: 
 		pyplot.title("deviation")
 		pyplot.legend(labels, loc=2)
 		pyplot.xlabel('nodes , ordered by flow_deviation')
-		pyplot.ylabel('flow_deviation $ln(FlowSum(n)/FlowDeviation(n))')
+		pyplot.ylabel('flow_deviation $ln(FlowSum(n)/FlowDeviation(n))$')
 
 	if script_mode == "show":
 		pyplot.show()
