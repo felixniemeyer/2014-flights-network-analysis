@@ -1,0 +1,51 @@
+- Introduction: reminder, what the data looks like
+	- multi directed graph 
+
+- Data loading
+	- Show SQL cleaning script to give an impression
+	- Degree Distribution
+		- uneven vs. even distributions
+
+- Data enrichment
+	- Patronage 
+		- Wikidata
+			- Show SPARQL
+			- monthly vs. yearly values
+			- missing patronage data from other years
+			values for about 2000 airports of 8000
+		- Runway surface data
+			- list of runways
+			- add up runway surface
+			- calculate a factor: passengers per runway
+			- use it to estimate patronage for remaining airports 6000
+			- fun fact: need to exclude water runway surfaces - as they tend to be huge
+		- Apply Threshold: avg patronage of (min 1% of airports with patronage data from wikidata) 
+	- Passenger flow computation 
+		- Algorithm
+			- Initial flows: 
+				- Calculate the total flow. numbers of connections * sqrt(patronage_a / degree_a * patronage_b / degree_b).
+				- Calculate the share of each airline for this total flow: sqrt(airline_degree_a / airline_degree_b) / sum of share
+			- Iteration: 
+				- For each airport, add flows of all routes of the airport. increase / decrease the airport's flows - proportional to their share
+
+- CUT - 
+
+- Content of the paper
+	- Airlines comparison
+		- Simple metrics
+		- Distributions
+
+	- Largeness ( length-2 paths weighted by geometric mean of patronages of connected airports. ) 
+		- Research paper
+		- Question: which potential connection would lead to the biggest largeness increase for an airline
+		- Question: what potential does a merger of airlines/alliances bring
+
+	- Comparing our model to a real world incident: Vanilla Alliance
+		
+
+
+- Ideas that we have: 
+	- Looking at stock prices
+	- Include data about profits
+	- Comparing regions
+	
