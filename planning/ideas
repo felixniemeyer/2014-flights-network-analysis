@@ -11,6 +11,9 @@ Analysis
 		Connection length [km]
 		  - Total 
 		  - Average 
+		Passenger Flow [passgenger]
+		  - Total
+		  - Average
 		connection length [km] * passenger flow [passenger]
 		  - Total 
 		  - Average
