@@ -45,7 +45,7 @@ def run(db_file):
 				share_sum += share
 				if r == route: 
 					this_share = share
-		route.flow = total_flow * this_share * count / share_sum
+		route.flow = total_flow * count * this_share / share_sum
 
 		sys.stdout.write("\rinitializing {0:.1f}%".format(100 * i / len(routes)))
 	sys.stdout.write("\rinitializing 100%   \n")

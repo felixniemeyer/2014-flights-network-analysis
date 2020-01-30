@@ -11,11 +11,11 @@ printf "loading and cleaning openflights data...\n"
 sqlite3 "$DB_FILE" < ./queries/load-openflights-data.sql 
 sqlite3 "$DB_FILE" < ./queries/clean-openflights-data.sql
 
-printf "exporting airport list...\n" 
-sqlite3 "$DB_FILE" < ./queries/list-airports.sql > ./airport-patronage/custom_airport_ids
-
 printf "adding runway surface column\n"
 sqlite3 "$DB_FILE" < ./queries/set-up-runway-surface.sql
+
+printf "exporting airport list...\n" 
+sqlite3 "$DB_FILE" < ./queries/list-airports.sql > ./airport-patronage/custom_airport_ids
 
 printf "extracting patronage from wikidata download...\n"
 pushd ./airport-patronage > /dev/null

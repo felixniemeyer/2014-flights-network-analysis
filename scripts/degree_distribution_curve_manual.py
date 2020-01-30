@@ -52,7 +52,7 @@ plt.plot(degrees, nodes, 'o')
 plt.plot(x, y, color='red')
 plt.plot(mx, my, color='orange')
 
-plt.title('whole network degree distribution (multiple edges possible)')
+plt.title('whole network degree distribution (multiple edges possible, only nodes with even degrees)')
 plt.xlabel('degree')
 plt.ylabel('number of nodes')
 
