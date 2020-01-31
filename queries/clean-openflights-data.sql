@@ -93,6 +93,7 @@ WHERE
 			id = routes.source_airport_id
 	) 
 ;
+DROP TABLE temp_airport_ids_from_routes_without_airport_row;
 
 /* delete airports with non-existing routes */ 
 DROP TABLE IF EXISTS temp_airport_ids_without_routes;

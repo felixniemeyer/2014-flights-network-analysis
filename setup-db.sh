@@ -1,8 +1,9 @@
 #/usr/bin/bash
 
-printf "\nusage: $0 <db-file(optional)>\n"
+printf "\nusage: $0 [<db-file>]>\n"
 printf "make sure you have the following files in place:\n"
 printf "./data/{airports.dat,airlines.dat,routes.dat}\n"
+printf "./data/ourairports.com/runways.csv\n"
 printf "./airport-patronage/wikidata-airport-patronage.csv\n\n"
 
 DB_FILE=${1:-./db.db}

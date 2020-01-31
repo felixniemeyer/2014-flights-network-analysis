@@ -2,6 +2,8 @@
 /* runway surface data */
 /*---------------------*/
 
+DROP TABLE IF EXISTS temp_runways;
+
 CREATE TABLE temp_runways (
 	"runway_id" TEXT PRIMARY KEY, 
 	"airport_ref" TEXT,
@@ -31,6 +33,7 @@ DELETE FROM temp_runways WHERE runway_id = 'id';
 
 ALTER TABLE airports ADD COLUMN runway_surface INT; 
 
+DROP TABLE IF EXISTS temp_airport_runway_surfaces;
 CREATE TABLE temp_airport_runway_surfaces AS
 SELECT 
 	a.icao, 

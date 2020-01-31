@@ -26,6 +26,7 @@ def run(db_file):
 			except: 
 				airport.airline_degree[alid] = 1
 
+	print()
 	for i, route in enumerate(routes): 
 		sa = route.source_airport
 		da = route.destination_airport
