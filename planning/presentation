@@ -23,10 +23,13 @@
 	- Passenger flow computation 
 		- Algorithm
 			- Initial flows: 
-				- Calculate the total flow. numbers of connections * sqrt(patronage_a / degree_a * patronage_b / degree_b).
-				- Calculate the share of each airline for this total flow: sqrt(airline_degree_a / airline_degree_b) / sum of share
+				- Calculate the total flow. 
+					numbers of connections * sqrt(patronage_a / degree_a * patronage_b / degree_b).
+				- Calculate the share of each airline for this total flow: 
+					sqrt(airline_degree_a / airline_degree_b) / sum of share
 			- Iteration: 
-				- For each airport, add flows of all routes of the airport. increase / decrease the airport's flows - proportional to their share
+				- For each airport, add flows of all routes of the airport. 
+				- increase / decrease the airport's flows - proportional to their share
 
 - CUT - 
 
@@ -39,10 +42,9 @@
 		- Research paper
 		- Question: which potential connection would lead to the biggest largeness increase for an airline
 		- Question: what potential does a merger of airlines/alliances bring
+		- Alliances Game: calculate the alliance opportunity: largeness(N1 u N2) / Sum(largenesses) 
 
 	- Comparing our model to a real world incident: Vanilla Alliance
-		
-
 
 - Ideas that we have: 
 	- Looking at stock prices
