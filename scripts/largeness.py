@@ -2,8 +2,6 @@ import networkx as nx
 import numpy as np
 import math
 
-
-
 def calculateForGraph(G): 
 	nodes = list(G.nodes())
 	adjm = nx.to_numpy_matrix(G, dtype=int, multigraph_weight='min')	
