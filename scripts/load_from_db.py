@@ -37,7 +37,6 @@ def load(db_file=local_config.db_file):
 	for row in db_cursor:
 		airline_id = row[0]
 		airlines[airline_id] = Airline(*row)
-	airlines['\\N'] = Airline('\\N', 'unknown airline', '', '')
 
 	route_columns = [
 		"airline_id",

@@ -1,4 +1,11 @@
-/* delete routes that include airports about which no data is present */ 
+/* delete routes with unknown airlines */ 
+DELETE FROM 
+	routes
+WHERE
+	airline_id = '\N'
+;
+
+/* delete routes that do not use an airport_id and use an iata, that does not appear in the airports table */ 
 DROP TABLE IF EXISTS temp_iata_codes_without_id;
 CREATE TABLE temp_iata_codes_without_id AS
 SELECT 
@@ -31,7 +38,7 @@ WHERE
 
 DROP TABLE temp_iata_codes_without_id;
 
-/* fill in airport_id, where iata code is present but no airport_id */ 
+/* fill in airport_id in route entries, where iata code is present but no airport_id */ 
 UPDATE 
 	routes 
 SET
@@ -125,5 +132,5 @@ WHERE
 	)
 ;
 
-DROP TABLE temp_airport_ids_without_routes
+DROP TABLE temp_airport_ids_without_routes;
 
