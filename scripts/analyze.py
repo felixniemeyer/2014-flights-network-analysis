@@ -1,4 +1,3 @@
-import csv
 import numpy as np
 import networkx as nx
 import matplotlib.pyplot as plt
@@ -28,11 +27,6 @@ def getEntireNetwork():
         if not routes.has_edge(row[2], row[4], key=row[1]):
             dist = get_dist(row[2], row[4])
             routes.add_edge(row[2], row[4], key=row[1], dist=dist)
-
-    # with open('../data/routes.dat') as f:
-    #     csv_reader = csv.reader(f)
-    #     for row in csv_reader:
-    #         routes.add_edge(row[3], row[5])
 
     nx.draw_networkx(routes, with_labels=True, node_size=10, font_size=2, arrowsize=4)
     plt.savefig("./sample3.pdf", bbox_inches='tight', format='pdf', dpi=1200)
