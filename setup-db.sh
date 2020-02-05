@@ -43,8 +43,9 @@ python ./scripts/estimate-passenger-flows.py write_csv "$DB_FILE"
 
 printf "adding passenger flows"
 sqlite3 "$DB_FILE" < ./queries/set-up-passenger-flows.sql
+sqlite3 "$DB_FILE" < ./queries/set-up-flow-estimation-metrics.sql
 rm ./temp_passenger_flows.csv
-rm ./temp_airport_flow_deviation.csv
+rm ./temp_flow_estimation_metrics.csv
 
 printf "\ndone, enjoy.\n\n" 
 

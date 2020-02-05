@@ -1,7 +1,3 @@
-/*--------------*/
-/* geo_distance */
-/*--------------*/
-
 DROP TABLE IF EXISTS temp_passenger_flows;
 
 CREATE TABLE temp_passenger_flows (

@@ -112,7 +112,7 @@ def run(db_file):
 				route.destination_airport.airport_id,
 				route.flow
 			))
-		airport_csv = open('./temp_airport_flow_deviation.csv', 'w')
+		airport_csv = open('./temp_flow_estimation_metrics.csv', 'w')
 		for airport_id, airport in airports.items():
 			airport_csv.write("%s,%f,%f\n" % (
 				airport_id, 
