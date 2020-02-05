@@ -5,6 +5,39 @@ WHERE
 	airline_id = '\N'
 ;
 
+/* delte airlines with no routes */ 
+DROP TABLE IF EXISTS temp_airline_ids_with_no_routes;
+CREATE TABLE temp_airline_ids_with_no_routes (
+	airline_id TEXT PRIMARY KEY
+);
+INSERT INTO temp_airline_ids_with_no_routes SELECT airline_id FROM (
+	SELECT 
+		airline_id
+	FROM 
+		airlines
+	EXCEPT
+	SELECT 
+		airline_id
+	FROM 
+		routes
+);
+
+DELETE FROM
+	airlines
+WHERE 
+	EXISTS ( 
+		SELECT
+			1
+		FROM
+			temp_airline_ids_with_no_routes 
+		WHERE 
+			airlines.airline_id = temp_airline_ids_with_no_routes.airline_id
+	) 
+;
+
+DROP TABLE temp_airline_ids_with_no_routes; 
+		
+
 /* delete routes that do not use an airport_id and use an iata, that does not appear in the airports table */ 
 DROP TABLE IF EXISTS temp_iata_codes_without_id;
 CREATE TABLE temp_iata_codes_without_id AS
