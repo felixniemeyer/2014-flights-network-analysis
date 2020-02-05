@@ -33,23 +33,61 @@ def getEntireNetwork():
 	plt.savefig("./sample3.pdf", bbox_inches='tight', format='pdf', dpi=1200)
 	return routes
 
+
+airport_columns = [
+	"airport_id",
+	"name", 
+	"iata", 
+	"icao", 
+	"city", 
+	"country", 
+	"latitude", 
+	"longitude", 
+	"patronage",
+]
+
+
+route_columns = [
+	"source_airport_id", 
+	"destination_airport_id", 
+	"airline_id",
+	"geo_distance", 
+	"passenger_flow"
+]
+
+
+def loadEntireNetwork(): 
+	G = nx.MultiDiGraph()
+	conn = sqlite3.connect(local_config.db_file)
+	cursor = conn.cursor()
+
+	cursor.execute('SELECT {0} FROM airports'.format(','.join(airport_columns)))
+	for row in cursor: 
+		a_id = row[0]
+		attribs = {}
+		for column_index, column_name in enumerate(airport_columns): 
+			attribs[column_name] = row[column_index]
+		G.add_node(a_id, **attribs)	
+		
+	cursor.execute('SELECT {0} FROM routes'.format(','.join(route_columns)))
+	for row in cursor: 
+		sa_id = row[0]
+		da_id = row[1]
+		attribs = {}
+		for column_index, column_name in enumerate(route_columns): 
+			attribs[column_name] = row[column_index]
+		G.add_edge(sa_id, da_id, **attribs)
+	
+	return G
+
+
 def loadAirlineNetwork(airline_id):
 	G = nx.DiGraph()
 	conn = sqlite3.connect(local_config.db_file)
 	cursor = conn.cursor()
 
-	route_columns = [
-		"source_airport_id", 
-		"destination_airport_id", 
-		"airline_id",
-		"geo_distance", 
-		"passenger_flow"
-	]
-
 	query = "SELECT {} FROM routes WHERE airline_id=?".format(', '.join(route_columns))
-
 	cursor.execute(query, [airline_id])
-
 	for row in cursor: 
 		sa_id = row[0]
 		da_id = row[1]
@@ -58,20 +96,8 @@ def loadAirlineNetwork(airline_id):
 		for column_name in route_columns[2:]:
 			attribs[column_name] = row[column_index]
 			column_index += 1
-		G.add_edge(sa_id, da_id, attr_dict=attribs)
+		G.add_edge(sa_id, da_id, **attribs)
 
-	# add airport information to relevant nodes
-	airport_columns = [
-		"airport_id",
-		"name", 
-		"iata", 
-		"icao", 
-		"city", 
-		"country", 
-		"latitude", 
-		"longitude", 
-		"patronage",
-	]
 	cursor.execute('SELECT {0} FROM airports'.format(', '.join(airport_columns)))
 	for row in cursor:
 		a_id = row[0]
