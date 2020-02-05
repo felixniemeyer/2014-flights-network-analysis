@@ -54,8 +54,29 @@ def loadAirlineNetwork(airline_id):
 		sa_id = row[0]
 		da_id = row[1]
 		attribs = {}
+		column_index = 2
 		for column_name in route_columns[2:]:
-			attribs[column_name] = column_name
+			attribs[column_name] = row[column_index]
+			column_index += 1
 		G.add_edge(sa_id, da_id, attr_dict=attribs)
+
+	# add airport information to relevant nodes
+	airport_columns = [
+		"airport_id",
+		"name", 
+		"iata", 
+		"icao", 
+		"city", 
+		"country", 
+		"latitude", 
+		"longitude", 
+		"patronage",
+	]
+	cursor.execute('SELECT {0} FROM airports'.format(', '.join(airport_columns)))
+	for row in cursor:
+		a_id = row[0]
+		if a_id in G.nodes:
+			for column_index, column_name in enumerate(airport_columns): 
+				G.nodes[a_id][column_name] = row[column_index]
 
 	return G
