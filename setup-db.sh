@@ -27,6 +27,7 @@ cp ./airport-patronage/estimated-2014-patronage.csv ./data/
 
 printf "adding patronage column...\n"
 sqlite3 "$DB_FILE" < ./queries/set-up-patronage.sql
+python ./scripts/estimate-patronage-based-on-neighbor-airport-patronages.py "$DB_FILE"
 
 printf "removing duplicate routes (source, destination, airline)...\n"
 sqlite3 "$DB_FILE" < ./queries/remove-duplicate-connections-by-same-airline.sql
