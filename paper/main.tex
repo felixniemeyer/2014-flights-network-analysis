@@ -1,0 +1,77 @@
+%%
+% TUM Corporate Design LaTeX Templates
+% Based on the templates from https://www.tum.de/cd
+%
+% Feel free to join development on
+% https://gitlab.lrz.de/tum-templates/templates
+% and/or to create an issue in case of trouble.
+%
+% tum-article class for scientific articles, reports, exercise sheets, ...
+%
+%%
+
+\documentclass[twocolumn]{tum-article}
+%\documentclass[twocolumn, german]{tum-article}
+%\documentclass[times, twocolumn]{tum-article}
+%\documentclass[times]{tum-article}
+%\documentclass{tum-article}
+
+\usepackage{lipsum}
+
+\title{TUM CD Article Class}
+\author{Author 1\authormark{1,\Letter}\orcid{0000-0000-0000-0000},
+  Author 2\authormark{2}\orcid{0000-0000-0000-0000},
+  Author 3\authormark{1}\orcid{0000-0000-0000-0000}}
+
+% if too long for running head
+\titlerunning{TUM Article}
+\authorrunning{Author 1 et al.}
+
+\email{author.mail@tum.de}
+
+\affil[1]{Department of Electrical and Computer Engineering, Technical
+  University of Munich (TUM), Arcisstr. 21, 80333 Munich, Germany}
+\affil[2]{Department of Informatics, Technical University of Munich (TUM),
+  Boltzmannstr. 3, 85748 Garching, Germany}
+
+\date{Received: 10 August 2017 / Accepted: 02 Februar 2018\thanks{This is a
+    post-peer-review, pre-copyedit version of an article published in Fancy
+    Journal. The final authenticated version is available online at:
+    \url{http://dx.doi.org/}}}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  Abstract goes here. \lipsum[1]
+\end{abstract}
+
+\section{Introduction}
+
+\lipsum[2]\cite{jirauschek2014}
+
+\section{Theory}
+
+\lipsum[3-4]
+
+\section{Experimental Setup}
+
+\lipsum[4-5]
+
+\section{Results}
+
+\lipsum[6]
+
+\section{Conclusions}
+
+\lipsum[7]
+
+\section*{Acknowledgements}
+
+\lipsum[8]
+
+\bibliographystyle{IEEEtran}
+\bibliography{literature}
+
+\end{document}
