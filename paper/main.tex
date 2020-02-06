@@ -18,33 +18,28 @@
 
 \usepackage{lipsum}
 
-\title{TUM CD Article Class}
-\author{Author 1\authormark{1,\Letter}\orcid{0000-0000-0000-0000},
-  Author 2\authormark{2}\orcid{0000-0000-0000-0000},
-  Author 3\authormark{1}\orcid{0000-0000-0000-0000}}
+\title{Analysis of the 2014 Passenger Flight Network}
+\author{Felix Paul Niemeyer\authormark{1},
+	Saicharan Kumar\authormark{2}}
+% Author 3\authormark{1}\orcid{0000-0000-0000-0000}}
 
 % if too long for running head
 \titlerunning{TUM Article}
 \authorrunning{Author 1 et al.}
 
-\email{author.mail@tum.de}
+%\email{niemeyer.felix@tum.de}
 
-\affil[1]{Department of Electrical and Computer Engineering, Technical
-  University of Munich (TUM), Arcisstr. 21, 80333 Munich, Germany}
-\affil[2]{Department of Informatics, Technical University of Munich (TUM),
-  Boltzmannstr. 3, 85748 Garching, Germany}
+\affil[1]{felix.niemeyer@tum.de, MiM}
+\affil[2]{saicharan.kumar@tum.de, MiM}
 
-\date{Received: 10 August 2017 / Accepted: 02 Februar 2018\thanks{This is a
-    post-peer-review, pre-copyedit version of an article published in Fancy
-    Journal. The final authenticated version is available online at:
-    \url{http://dx.doi.org/}}}
+\date{Received: 19.02.2020 - This is work in progress}
 
 \begin{document}
 
 \maketitle
 
 \begin{abstract}
-  Abstract goes here. \lipsum[1]
+	In this case study we are looking at a dataset about air travel in 2014. We implement some mechanisms to clean the data, as well as mechanisms to enrich this dataset with information we query from wikidata. We estimate some missing data. Starting from there, we analyze some network characteristics for the whole network as well as airline-specific sub-networks. We compare airline-specific networks and find relations between their network's characteristics and their business model. We propose one metric that plays a role in forcasting whether a cooperation between two airlines is advantageous and use this metric to generate an alliances landscape. We compare it's predictive correctness to the real world by looking at the formation of Vanilla Airlines which occured in the year after the one our data stems from. 
 \end{abstract}
 
 \section{Introduction}
@@ -53,7 +48,7 @@
 
 \section{Theory}
 
-\lipsum[3-4]
+\lipsum[3]
 
 \section{Experimental Setup}
 
