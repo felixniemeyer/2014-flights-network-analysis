@@ -16,7 +16,7 @@
 %\documentclass[times]{tum-article}
 %\documentclass{tum-article}
 
-\usepackage{lipsum}
+%\usepackage{lipsum}
 
 \title{Analysis of the 2014 Passenger Flight Network}
 \author{Felix Paul Niemeyer\authormark{1},
@@ -42,29 +42,32 @@
 	In this case study we are looking at a dataset about air travel in 2014. We implement some mechanisms to clean the data, as well as mechanisms to enrich this dataset with information we query from wikidata. We estimate some missing data. Starting from there, we analyze some network characteristics for the whole network as well as airline-specific sub-networks. We compare airline-specific networks and find relations between their network's characteristics and their business model. We propose one metric that plays a role in forcasting whether a cooperation between two airlines is advantageous and use this metric to generate an alliances landscape. We compare it's predictive correctness to the real world by looking at the formation of Vanilla Airlines which occured in the year after the one our data stems from. 
 \end{abstract}
 
-\section{Introduction}
+\section{Data Description}
 
-\lipsum[2]\cite{jirauschek2014}
+example cite \cite{jirauschek20141}
 
-\section{Theory}
+\section{Data Enrichment \& Estimation}
 
-\lipsum[3]
+\section{Basic Network Analysis}
+There are 7 disconnected subgraphs in the Graph.
+Besides the main network, that includes ... nodes, there are 6 small ones with only a couple of nodes.
+One with 10 nodes for example, consists only of airports that are located in New Caledonia, an archipelago in the Pacific Ocean. 
+Another disconnected subgraph represents the connection of four airports around the San Juan Islands, an archipelago in the Pacific Northwest of the United States. There are two more disconnected subgraphs with four nodes and two with only two nodes. 
 
-\section{Experimental Setup}
+<images of these networks drawn on a map>
 
-\lipsum[4-5]
+\section{Airline Subnetwork Analysis \& Comparison}
 
-\section{Results}
 
-\lipsum[6]
+The possibility to provide convenient on-line connections to clients is an important factor that drives welfare gains through ailine cooperation according to E. E. Bailey and D. Liu \cite{airline_consolidation_and_consumer_welfare}.
+\section{Airline Cooperation Opportunity}
 
-\section{Conclusions}
 
-\lipsum[7]
+\section{Reality Check: Vanilla Airlines}
+
 
 \section*{Acknowledgements}
 
-\lipsum[8]
 
 \bibliographystyle{IEEEtran}
 \bibliography{literature}
