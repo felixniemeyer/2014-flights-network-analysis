@@ -3,7 +3,7 @@
 /*-----------*/
 
 DROP TABLE IF EXISTS temp_patronage;
-DROP TABLE IF EXISTS patronage_lower_threshold;
+DROP TABLE IF EXISTS temp_patronage_lower_threshold;
 DROP TABLE IF EXISTS patronage_runway_surface_ratio;
 
 CREATE TABLE temp_patronage (
@@ -31,7 +31,8 @@ SET
 
 DROP TABLE temp_patronage;
 
-CREATE TABLE patronage_lower_threshold AS
+DROP TABLE IF EXISTS temp_patronage_lower_threshold;
+CREATE TABLE temp_patronage_lower_threshold AS
 SELECT 
 	avg( patronage )
 FROM (
@@ -46,36 +47,4 @@ FROM (
 	LIMIT (SELECT count(*) / 100 FROM airports) )
 ;
 
-CREATE TABLE patronage_runway_surface_ratio AS 
-SELECT 
-	avg( cast(patronage as REAL) / cast(runway_surface as REAL) )
-FROM 
-	airports 
-WHERE
-	runway_surface is not null AND
-	patronage is not null
-;
-
-UPDATE 
-	airports 
-SET
-	patronage = cast( runway_surface * (
-		SELECT * FROM patronage_runway_surface_ratio
-	) as int)
-WHERE
-	patronage is null AND
-	runway_surface is not null
-;
-
-DROP TABLE patronage_runway_surface_ratio;
-
-UPDATE 
-	airports 
-SET
-	patronage = ( SELECT * FROM patronage_lower_threshold ) 
-WHERE
-	patronage is null OR
-	patronage < ( SELECT * FROM patronage_lower_threshold ) 
-;
-
-DROP TABLE patronage_lower_threshold;
+SELECT count(*) || ' airports without patronage left' FROM airports WHERE patronage is null; 

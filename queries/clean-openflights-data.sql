@@ -167,3 +167,6 @@ WHERE
 
 DROP TABLE temp_airport_ids_without_routes;
 
+SELECT count(*) || ' airports' FROM airports;
+SELECT count(*) || ' routes' FROM routes; 
+SELECT count(*) || ' airlines' FROM airlines; 
