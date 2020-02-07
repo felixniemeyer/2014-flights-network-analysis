@@ -3,7 +3,7 @@
 /*-----------*/
 
 DROP TABLE IF EXISTS temp_patronage;
-DROP TABLE IF EXISTS temp_patronage_lower_threshold;
+DROP TABLE IF EXISTS temp_default_patronage;
 DROP TABLE IF EXISTS patronage_runway_surface_ratio;
 
 CREATE TABLE temp_patronage (
@@ -31,8 +31,8 @@ SET
 
 DROP TABLE temp_patronage;
 
-DROP TABLE IF EXISTS temp_patronage_lower_threshold;
-CREATE TABLE temp_patronage_lower_threshold AS
+DROP TABLE IF EXISTS temp_default_patronage;
+CREATE TABLE temp_default_patronage AS
 SELECT 
 	avg( patronage )
 FROM (

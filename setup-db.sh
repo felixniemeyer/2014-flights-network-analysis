@@ -26,10 +26,14 @@ printf "adding patronage column...\n"
 sqlite3 "$DB_FILE" < ./queries/set-up-patronage.sql
 
 printf "estimating missing patronage...\n"
-python ./scripts/estimate-missing-patronage.py "$DB_FILE" ./temp_patronages_estimations.csv
+python ./scripts/estimate-missing-patronages.py "$DB_FILE" ./temp_missing_patronages.csv
 
 printf "loading missing patronage estimations...\n"
 sqlite3 "$DB_FILE" < ./queries/load-missing-patronage-estimations.sql
+rm ./temp_missing_patronages.csv
+
+printf "applying default patronage to remaining airports...\n"
+sqlite3 "$DB_FILE" < ./queries/apply-default_patronage.sql
 
 printf "removing duplicate routes (source, destination, airline)...\n"
 sqlite3 "$DB_FILE" < ./queries/remove-duplicate-connections-by-same-airline.sql
