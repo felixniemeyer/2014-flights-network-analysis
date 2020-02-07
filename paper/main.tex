@@ -45,23 +45,37 @@
 \section{Data Description}
 
 example cite \cite{jirauschek20141}
+Cleaning <look at the cleaning script, shortly list what we do>
 
 \section{Data Enrichment \& Estimation}
+After cleaning up the data, there are 3139 airports. 
+
+<degree distribution: even vs. odd degree occurences>
+
+Besides the main subgraph, that includes 3113 nodes, there are 6 small disconnected ones with only a couple of nodes.
+One with 10 nodes for example, consists only of airports that are located in New Caledonia, an archipelago in the Pacific Ocean. 
+<image of this example subgraph drawn on a map>
+
+In order to enable us to do more meaningful analysis, we enrich the dataset with additional information. We chose the airport patronage and found out, that we can get this data from Wikidata. 
+For 1956 of the 3139 airports from the dataset, we can find patronage data from Wikidata. 
+<describe how we do it: yearly vs. monthly + scaling from other years>
+In order to populate the remaining nodes with reasonable patronages as well, we tried different techniques. 
+First <using available data: runways -> factor -> calc. patronage per square feet + threshold, bad data quality. Show flow estimation iteration.>
+Seccond <inspired by professor: algorithm that looks at neighboring airports patronage. Describe Algorithm. Show flow estimation iteration>
+
+After estimating missing patronage data by looking at neighboring airports patronages, 14 airports without patronage remain. These must be in airports in disconnected subgraphs, because the algorithm would eventually reach them and assign a patronage otherwise. Investigations confirm that. We disregard these few dataless airports from disconnected subgraphs in the following analysises and thus end up with a network of 3125 airports. 
+
+<Passenger flow estimation algorithm, outcomes>
 
 \section{Basic Network Analysis}
-There are 7 disconnected subgraphs in the Graph.
-Besides the main network, that includes ... nodes, there are 6 small ones with only a couple of nodes.
-One with 10 nodes for example, consists only of airports that are located in New Caledonia, an archipelago in the Pacific Ocean. 
-Another disconnected subgraph represents the connection of four airports around the San Juan Islands, an archipelago in the Pacific Northwest of the United States. There are two more disconnected subgraphs with four nodes and two with only two nodes. 
 
-<images of these networks drawn on a map>
 
 \section{Airline Subnetwork Analysis \& Comparison}
 
 
-The possibility to provide convenient on-line connections to clients is an important factor that drives welfare gains through ailine cooperation according to E. E. Bailey and D. Liu \cite{airline_consolidation_and_consumer_welfare}.
 \section{Airline Cooperation Opportunity}
 
+The possibility to provide convenient on-line connections to clients is an important factor that drives welfare gains through ailine cooperation according to E. E. Bailey and D. Liu \cite{airline_consolidation_and_consumer_welfare}.
 
 \section{Reality Check: Vanilla Airlines}
 
