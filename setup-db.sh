@@ -12,9 +12,6 @@ printf "loading and cleaning openflights data...\n"
 sqlite3 "$DB_FILE" < ./queries/load-openflights-data.sql 
 sqlite3 "$DB_FILE" < ./queries/clean-openflights-data.sql
 
-printf "adding runway surface column\n"
-sqlite3 "$DB_FILE" < ./queries/set-up-runway-surface.sql
-
 printf "exporting airport list...\n" 
 sqlite3 "$DB_FILE" < ./queries/list-airports.sql > ./airport-patronage/custom_airport_ids
 
@@ -27,7 +24,12 @@ cp ./airport-patronage/estimated-2014-patronage.csv ./data/
 
 printf "adding patronage column...\n"
 sqlite3 "$DB_FILE" < ./queries/set-up-patronage.sql
-python ./scripts/estimate-patronage-based-on-neighbor-airport-patronages.py "$DB_FILE"
+
+printf "estimating missing patronage...\n"
+python ./scripts/estimate-missing-patronage.py "$DB_FILE" ./temp_patronages_estimations.csv
+
+printf "loading missing patronage estimations...\n"
+sqlite3 "$DB_FILE" < ./queries/load-missing-patronage-estimations.sql
 
 printf "removing duplicate routes (source, destination, airline)...\n"
 sqlite3 "$DB_FILE" < ./queries/remove-duplicate-connections-by-same-airline.sql
@@ -49,4 +51,5 @@ rm ./temp_passenger_flows.csv
 rm ./temp_flow_estimation_metrics.csv
 
 printf "\ndone, enjoy.\n\n" 
+
 
