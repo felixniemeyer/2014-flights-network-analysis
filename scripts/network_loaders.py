@@ -34,8 +34,7 @@ def getEntireNetwork():
 	return routes
 
 
-airport_columns = [
-	"airport_id",
+default_airport_columns = [
 	"name", 
 	"iata", 
 	"icao", 
@@ -47,18 +46,31 @@ airport_columns = [
 ]
 
 
-route_columns = [
-	"source_airport_id", 
-	"destination_airport_id", 
+default_route_columns = [
 	"airline_id",
 	"geo_distance", 
 	"passenger_flow"
 ]
 
 
-def loadEntireNetwork(): 
+def prependIdColumns(ac, rc): 
+	ac = ["airport_id"] + ac
+	rc = [
+		"source_airport_id", 
+		"destination_airport_id", 
+	] + rc
+	return ac, rc
+
+def loadEntireNetwork(
+	airport_columns=default_airport_columns,
+	route_columns=default_route_columns,
+	db_file=local_config.db_file
+	): 
+
+	airport_columns, route_columns = prependIdColumns(airport_columns, route_columns) 
+
 	G = nx.MultiDiGraph()
-	conn = sqlite3.connect(local_config.db_file)
+	conn = sqlite3.connect(db_file)
 	cursor = conn.cursor()
 
 	cursor.execute('SELECT {0} FROM airports'.format(','.join(airport_columns)))
@@ -81,7 +93,13 @@ def loadEntireNetwork():
 	return G
 
 
-def loadAirlineNetwork(airline_id):
+def loadAirlineNetwork(
+	airport_columns=default_airport_columns,
+	route_columns=default_route_columns
+	): 
+
+	airport_columns, route_columns = prependIdColumns(airport_columns, route_columns) 
+
 	G = nx.DiGraph()
 	conn = sqlite3.connect(local_config.db_file)
 	cursor = conn.cursor()
