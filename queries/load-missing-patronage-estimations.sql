@@ -6,7 +6,7 @@ CREATE TABLE temp_patronage_estimations (
 );
 
 .mode csv temp_patronage_estimations
-.import ./temp_patronage_estimations.csv temp_patronage_estimations
+.import ./temp_missing_patronages.csv temp_patronage_estimations
 
 UPDATE
 	airports

@@ -15,6 +15,8 @@ else:
 		db_file=sys.argv[1]
 	)
 
+	G = G.to_undirected(reciprocal=False)
+
 	nodes = G.nodes
 
 	of = open(sys.argv[2], 'w') 
