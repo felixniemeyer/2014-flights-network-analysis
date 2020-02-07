@@ -32,8 +32,8 @@ printf "loading missing patronage estimations...\n"
 sqlite3 "$DB_FILE" < ./queries/load-missing-patronage-estimations.sql
 rm ./temp_missing_patronages.csv
 
-printf "applying default patronage to remaining airports...\n"
-sqlite3 "$DB_FILE" < ./queries/apply-default_patronage.sql
+printf "remove those disconnected airports and their routes...\n"
+sqlite3 "$DB_FILE" < ./queries/remove_disconnected_subgraphs_without_patronage_data.sql
 
 printf "removing duplicate routes (source, destination, airline)...\n"
 sqlite3 "$DB_FILE" < ./queries/remove-duplicate-connections-by-same-airline.sql

@@ -14,7 +14,7 @@ else:
 
 G = network_loaders.loadEntireNetwork()
 
-S = nx.ego_graph(G, n, radius=3, undirected=True) 
+S = nx.ego_graph(G, n, radius=2, undirected=True) 
 
 nx.draw(
 	S,
