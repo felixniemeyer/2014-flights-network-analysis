@@ -8,51 +8,52 @@ import network_loader
 
 network = network_loader.load()
 
-degree_counts = {}
+node_counts_dict = {}
 max_degree = 0
 
 for n, d in network.degree():
 	try:
-		degree_counts[d] += 1
+		node_counts_dict[d] += 1
 	except:
-		degree_counts[d] = 1
+		node_counts_dict[d] = 1
 	if d > max_degree: 
 		max_degree = d
 
 degrees = []
-nodes = []
+node_counts = []
 
-for degree_count in degree_counts:
-	if degree_count % 2 == 0:
-		degrees.append(degree_count)
-		nodes.append(degree_counts[degree_count])
+for degree in node_counts_dict:
+	if degree % 2 == 0:
+		degrees.append(degree)
+		node_counts.append(node_counts_dict[degree])
 	
 degrees = np.array(degrees)
-nodes = np.array(nodes) 
+node_counts = np.array(node_counts) 
 
-def f1(x, c, a):
-	return c * np.power(math.e, -a * x)
+def f(x, c, a):
+	return c * np.power(x, -a)
 
-def f2(x, c, g):
-	return c * np.power(x, -g)
+def f_log(x, c, a): 
+	return np.log(f(np.exp(x), c, a))
 
-f = f2
-
-((c, a), pcov) = scipy.optimize.curve_fit(f, degrees, nodes, p0=(100,0.5))
- 
-x = np.logspace(1,np.log10(max_degree/10),100)
-y = f(x, c, a)
- 
+# manual estimation 
 mc = 4900
 ma = 1.55
-mx = x.copy()
-my = f(mx, mc, ma)
 
-plt.plot(degrees, nodes, 'o')
-plt.plot(x, y, color='red')
-plt.plot(mx, my, color='orange')
+# least square fit
+((c, a), pcov) = scipy.optimize.curve_fit(f, degrees, node_counts, p0=(100,0.5))
+ 
+# least square fit on log
+log_degrees = np.log(degrees)
+((lc, la), pcov) = scipy.optimize.curve_fit(f_log, np.log(degrees), np.log(node_counts), p0=(mc, ma)) 
 
-plt.title('whole network degree distribution (multiple edges possible, only nodes with even degrees)')
+x = np.logspace(1,np.log10(max_degree/10),100)
+
+plt.plot(x, f(x, c, a), color='red')
+plt.plot(x, f(x, lc, la), color='green')
+plt.plot(x, f(x, mc, ma), color='orange')
+plt.scatter(degrees, node_counts, marker='o', s=10)
+
 plt.xlabel('degree')
 plt.ylabel('number of nodes')
 
@@ -60,12 +61,13 @@ plt.xscale('log')
 plt.yscale('log')
 
 labels = [
-	'nodes per degree',
 	'curve_fit: ${0:.2f}*e^{{-{1:.2f}d}}$'.format(c,a),
-	'manual: ${0:.2f}*e^{{-{1:.2f}d}}$'.format(mc,ma)
+	'curve_fit, log(y): ${0:.2f}*e^{{-{1:.2f}d}}$'.format(lc,la),
+	'manual: ${0:.2f}*e^{{-{1:.2f}d}}$'.format(mc,ma),
+	'nodes per degree',
 ]
 plt.legend(labels, loc=1)
 
-plt.savefig('./results/degree_distribution_curve_manual.png', dpi=300)
+plt.savefig('./results/degree_distribution_curve_manual.png', dpi=300, bbox_inches='tight')
 plt.show()
 

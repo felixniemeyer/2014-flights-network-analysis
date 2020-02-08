@@ -54,7 +54,7 @@ def run(db_file):
 	for i, airport in airports.items(): 
 		airport.recalc_flow_sum_and_deviation()
 
-	if plot_figure: 
+	if script_mode == "show": 
 		min_max_sum = plot_flow_deviation_distribution(airports)
 		labels = ["initial. min, max, sum: [{0:.2f}, {1:.2f}, {2:.2f}]".format(*min_max_sum)]
 
@@ -80,7 +80,7 @@ def run(db_file):
 		if iteration - last_plot >= plot_each: 
 			last_plot = iteration 
 			
-			if plot_figure:
+			if script_mode == "show":
 				min_max_sum = plot_flow_deviation_distribution(airports)
 				label_template = "iteration {3}. min, max, sum(abs): [{0:.2f}, {1:.2f}, {2:.2f}]"
 				labels.append(label_template.format(*min_max_sum, iteration + 1))
@@ -91,17 +91,17 @@ def run(db_file):
 
 	sys.stdout.write("\riterating 100%   \n")
 
-	if plot_figure: 
+	if script_mode == "show": 
 		pyplot.title("deviation")
 		pyplot.legend(labels, loc=2)
 		pyplot.xlabel('nodes , ordered by flow_deviation')
 		pyplot.ylabel('flow_deviation $ln(FlowSum(n)/FlowDeviation(n))$')
-
-	if script_mode == "show":
+		pyplot.savefig(
+			'./results/flow_estimation_{0}_iterations.png'.format(iterations),
+			dpi=300
+			bbox_inches='tight'
+		)
 		pyplot.show()
-
-	if save_figure: 
-		pyplot.savefig('./results/flow_estimation_{0}_iterations.png'.format(iterations), dpi=300)
 
 	if script_mode == "write_csv":
 		routes_csv = open('./temp_passenger_flows.csv', 'w')
@@ -138,24 +138,21 @@ def plot_flow_deviation_distribution(airports):
 	highest = sorted_list[-1].flow_deviation
 	return (smallest, highest, abs_integral )
 
-if len(sys.argv) > 1: 
-	script_mode = sys.argv[1]
-else:
+understood = True
+if len(sys.argv) < 2: 
 	script_mode = "show"
+else: 	
+	script_mode = sys.argv[1]
+	if script_mode not in ["show", "write_csv"]:
+		understood = False
 
-db_file = local_config.db_file
-if len(sys.argv) > 2: 
-	db_file_i = 2
-	save_figure = sys.argv[2] == "save_figure"
-	if save_figure:
-		db_file_i += 1
-	db_file = sys.argv[db_file_i]
+if len(sys.argv) < 3: 
+	db_file = local_config.db_file
 else:
-	save_figure = False
+	db_file = sys.argv[2]
 
-plot_figure = script_mode == 'show' or save_figure
-
-if script_mode in ["show", "write_csv"]:
+if understood:
 	run(db_file)
 else:
-	print("usage: {0} <mode=show|write_csv> [save_figure] [<db_file>]".format(sys.argv[0])) 
+	print("Error: wrong usage.")
+	print("Correct usage: {0} <mode=show|write_csv> [<db_file>]".format(sys.argv[0])) 
