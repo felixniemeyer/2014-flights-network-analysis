@@ -43,18 +43,55 @@
 \end{abstract}
 
 \section{Data Description}
+The network analysis is based on dataset from openflights.org. 
+It describes passenger flight connections between airports in the year 2014. 
+The data includes, which airline each connection is operated by.
+The data comes in three tables: airports, routes and airlines. 
+The airports table has entries for every airport with the following useful information: \\
+- airport id\\
+- iata and icao codes\\
+- geographic coordinates\\
+- country and region\\
 
-example cite \cite{jirauschek20141}
-Cleaning <look at the cleaning script, shortly list what we do>
+The routes table lists an entrie for each connection between two airports that was operated by an airline somewhen in the year 2014. It does not contain any information about flight frequencies or passenger volume. The airline table lists airlines associated with their name and some information we do not need like country or callsign. \\
+
+We are loading these files into an sqlite database for easier handling. 
+We apply some queries for cleaning the data, e.g. removing routes operated by unknown airlines or filling in airport ids in routes where only iata or icao code is used to refer to a source or destination airport. \\
+
+All the data-setup can be acomplished by running a single script.
+This script and also all other code we have written for this project can be found in a public repository \cite{repository}.
 
 \section{Data Enrichment \& Estimation}
 After cleaning up the data, there are 3139 airports. 
+Interpreting the data as a graph gives us a multiedge directed graph).
+Looking at the degree distribution in Figure~\ref{fig:degree_distribution}, the alternating characteristic of degrees strikes the eye. It comes from the fact, that it's very uncommon for a connection between airports to exist only in one direction. Thus, there is much fewer nodes with odd degrees than than with even degrees. 
 
-<degree distribution: even vs. odd degree occurences>
+When we disregard odd degress, the seemingly linear distribution on a log log scale becomes apparent. Using least square (scipy.optimize.curve\_fit), we optimize paramters $c$ and $\gamma$ Figure~\ref{fig:degree_distribution_curves}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=76mm]{imgs/results/degree_distribution_incl_odd_degrees.png}
+	\caption{
+The degree distribution of the network on a log log scale }
+	\label{fig:degree_distribution}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=76mm]{imgs/results/degree_distribution_curve_manual.png}
+	\caption{
+Looking at even degrees only. Trying least square curve fitting to find suitable parameters for power law distribution function $f(x) = a * x^{-\gamma}$}
+	\label{fig:degree_distribution_curves}
+\end{figure}
 
 Besides the main subgraph, that includes 3113 nodes, there are 6 small disconnected ones with only a couple of nodes.
-One with 10 nodes for example, consists only of airports that are located in New Caledonia, an archipelago in the Pacific Ocean. 
-<image of this example subgraph drawn on a map>
+One with 10 nodes for example Figure~\ref{fig:new_caledonia}, consists only of airports that are located in New Caledonia, an archipelago in the Pacific Ocean. 
+\begin{figure}
+	\centering
+	\includegraphics[width=76mm]{imgs/new-caledonia-subgraph.png}
+	\caption{Airports of New Caledonia drawn on a map}
+	\label{fig:new_caledonia}
+\end{figure}
 
 In order to enable us to do more meaningful analysis, we enrich the dataset with additional information. We chose the airport patronage and found out, that we can get this data from Wikidata. 
 For 1956 of the 3139 airports from the dataset, we can find patronage data from Wikidata. 
