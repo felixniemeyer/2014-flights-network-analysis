@@ -17,7 +17,7 @@
 %\documentclass{tum-article}
 
 %\usepackage{lipsum}
-\usepackage{listings}
+\usepackage{amsmath}
 
 \title{Analysis of the 2014 Passenger Flight Network}
 \author{Felix Paul Niemeyer\authormark{1},
@@ -40,7 +40,7 @@
 \maketitle
 
 \begin{abstract}
-	In this case study we are looking at a dataset about air travel in 2014. We implement some mechanisms to clean the data, as well as mechanisms to enrich this dataset with information we query from wikidata. We estimate some missing data. Starting from there, we analyze some network characteristics for the whole network as well as airline-specific sub-networks. We compare airline-specific networks and find relations between their network's characteristics and their business model. We propose one metric that plays a role in forcasting whether a cooperation between two airlines is advantageous and use this metric to generate an alliances landscape. We compare it's predictive correctness to the real world by looking at the formation of Vanilla Airlines which occured in the year after the one our data stems from. 
+	In this case study we are looking at a dataset about air travel in 2014. We implement some mechanisms to clean the data, as well as mechanisms to enrich this dataset with information we query from wikidata. We estimate some missing data. Starting from there, we analyze some network characteristics for the whole network as well as airline-specific sub-networks. We compare airline-specific networks and find relations between their network's characteristics and their business model. We propose one metric that plays a role in forecasting whether a cooperation between two airlines is advantageous and use this metric to generate an alliances landscape. We compare it's predictive correctness to the real world by looking at the formation of Vanilla Airlines which occurred in the year after the one our data stems from. 
 \end{abstract}
 
 \section{Data Description}
@@ -54,20 +54,20 @@ The airports table has entries for every airport with the following useful infor
 - geographic coordinates\\
 - country and region\\
 
-The routes table lists an entrie for each connection between two airports that was operated by an airline somewhen in the year 2014. It does not contain any information about flight frequencies or passenger volume. The airline table lists airlines associated with their name and some information we do not need like country or callsign. \\
+The routes table lists an entry for each connection between two airports that was operated by an airline sometime in the year 2014. It does not contain any information about flight frequencies or passenger volume. The airline table lists airlines associated with their name and some information we do not need like country or call sign. \\
 
-We are loading these files into an sqlite database for easier handling. 
+We are loading these files into an SQLite database for easier handling. 
 We apply some queries for cleaning the data, e.g. removing routes operated by unknown airlines or filling in airport ids in routes where only iata or icao code is used to refer to a source or destination airport. \\
 
-All the data-setup can be acomplished by running a single script.
+All the data-setup can be accomplished by running a single script.
 This script and also all other code we have written for this project can be found in a public repository on GitHub\cite{repository}.
 
 \section{Data Enrichment \& Estimation}
 After cleaning up the data, there are 3139 airports. 
-Interpreting the data as a graph gives us a multiedge directed graph).
+Interpreting the data as a graph gives us a multi-edge directed graph).
 Looking at the degree distribution in Figure~\ref{fig:degree_distribution}, the alternating characteristic of degrees strikes the eye. It comes from the fact, that it's very uncommon for a connection between airports to exist only in one direction. Thus, there is much fewer nodes with odd degrees than than with even degrees. 
 
-When we disregard odd degress, the seemingly linear distribution on a log log scale becomes apparent. Using least square (scipy.optimize.curve\_fit), we optimize paramters $c$ and $\gamma$ as you can see in Figure~\ref{fig:degree_distribution_curves}
+When we disregard odd degrees, the seemingly linear distribution on a log log scale becomes apparent. Using least square (scipy.optimize.curve\_fit), we optimize parameters $c$ and $\gamma$ as you can see in Figure~\ref{fig:degree_distribution_curves}
 
 \begin{figure}
 	\centering
@@ -135,53 +135,108 @@ while r != pr:
     node["patronage"] = ep[apid]
 \end{lstlisting}
 
-This seccond approach yields much nicer estimations, as we will see after estimating the flows between airports. 
+This second approach yields much nicer estimations, as we will see after estimating the flows between airports. 
 
 The flows are estimated by choosing reasonable initial values and then applying corrections iteratively to approach a situation where the sum of the estimated flows for each airport equal its patronage value.
-The average initial values for an edge between airport a and b is chosen as: \footnote{hmm, vielleicht auch nicht den avg, sondern den total flow zwischen den airports so berechenen - ich mein, das hab ich ja gemacht!}
+The average initial values for an edge between airport $p$ and $q$ is chosen as: 
 
-$avgFlow_{ab} = $
+\begin{equation}
+avgFlow(pq) = \dfrac{patronage(p) * patronage(q)}{degree(p) * degree(q)}
+\end{equation}
 
-$\dfrac{patronage(a) * patronage(b)}{degree(a) * degree(b)}$ 
+Remember that we are handling a multi-edge directed graph here. 
 
-Remember that we are handling a multiedge directed graph here. There may be multiple edges between two airports pointing in different directions and/or operated by different airlines.
-We could assume an equal distribution of the flows among the edges. But we chose trying to be closer to reality by weighting the flow of an edge between two airports $a$ and $b$, that is operated by airline $o$, by the geometric mean of the number of edges airline $o$ operates at airport $a$ and number of edges airline $o$ operates at airport $b$: 
+\begin{equation}
+E = \{(pql) | \exists\ \text{route from}\ p\ \text{to}\ q\ \text{by}\ l\}
+\end{equation}
 
-$flow_{ab} = $
+where $p$ and $q$ are airports and $l$ is an airline.
+Let us introduce a function $E(pq)$ that returns all edges between $p$ and $q$ disregarding the direction and operating airline. 
+\begin{equation}
+E(pq) = \{pql | \exists_{l \in L}:pql \in E \lor qpl \in E\}
+\end{equation}
 
-$avgFlow_{ab} * (|E_{ab}|+|E_{ba}|) * weight_{abo}$
+where $L$ is the set of airlines.
 
-Where $|E_{ab}|$ is the number of directed edges from $a$ to $b$ and
+And let us introduce the function $E(p)$ that returns all edges from and to an airport $p$ by every airline: 
+\begin{equation}
+E(p) = \{rsl | (r=p \lor s=p) \land \exists_{l \in L}:rsl \in E \}
+\end{equation}
 
-$weight_{abo} = $
+The Edges of the graph are thus triplets of a source airport, destination airport and an airline.
+There may be multiple edges between two airports pointing in different directions and/or operated by different airlines.
+We could assume an equal distribution of the flows among the edges. But we chose trying to be closer to reality by weighting the flow of an edge between two airports $p$ and $q$, that is operated by airline $l$, by the geometric mean of the number of edges airline $l$ operates at airport $p$ and number of edges airline $l$ operates at airport $q$: 
 
-$\dfrac{\sqrt{degree_{o}(a) * degree_{o}(b)}}{\displaystyle\sum_{l \in L \land c,d \in \{a,b\} \land c \neq d}(\sqrt{degree_{l}(c) * degree_{l}(d)})}$  
+\begin{equation}
+\begin{aligned}
+&flow(pql) =\\
+={}&avgFlow(pq)  
+* noe(pq) 
+* weight(pql) 
+\end{aligned}
+\end{equation}
+
+where $noe(pq)$ is the number of edges between airport $p$ and $q$ and $weight(pql)$ is defined as follows: 
+
+\begin{equation}
+\begin{aligned}
+&weight(pql) = \dfrac{\sqrt{degree_{l}(p) * degree_{l}(q)}}{pnws(pql)}
+\end{aligned}
+\end{equation}
+
+where the $pnws(pq)$ (Pre Normalization Weight Sum) is just the sum of the non-normalized weights of all the routes from different airlines to normalize the weights. 
+
+\begin{equation}
+\begin{aligned}
+&pnws(pq) = \\
+={}&\displaystyle\sum_{rsm \in E(pq)}(\sqrt{degree_{m}(r) * degree_{m}(s)})
+\end{aligned}
+\end{equation}
+
+where $degree_l(p)$ is the degree of airport $p$ in airline $l$'s subgraph, i.e. number of edges from and to airport $p$ operated by airline $l$.
 
 The ratios we choose here will stay intact over the course of the iterations in the next part of the algorithm. 
+In every iteration, we traverse all airports and for every airport we calculate the sum of current flows values of all routes. 
+
+\begin{equation}
+\begin{aligned}
+flowSum(p) = \displaystyle\sum_{pql \in E \cup pu \in E}flow_{pql}
+\end{aligned}
+\end{equation}
+
+Difference between the patronage and the current sum of passenger flows of incoming and outgoing routes. 
+Then, for each airport we calculate 
+
+\begin{equation}
+\begin{aligned}
+& flow_{pql}' = flow_{abo} \\
+& \displaystyle\sum_{a \in A | ab \in E \lor ba \in E} 
+\end{aligned}
+\end{equation}
 
 <describe iteration step>
 
 <Show results, compare runway to neighbor based estimation>
 
-The complete algorithm for passenger flow estimation is too long for beeing included in this document. You can find it in the repository: ./scripts/estimate-passenger-flows.py
+The complete algorithm for passenger flow estimation is too long for being included in this document. You can find it in the repository: ./scripts/estimate-passenger-flows.py
 
-After estimating missing patronage data by looking at neighboring airports patronages, 14 airports without patronage remain. These must be in airports in disconnected subgraphs, because the algorithm would eventually reach them and assign a patronage otherwise. Investigations confirm that. We disregard these few dataless airports from disconnected subgraphs in the following analysises and thus end up with a network of 3125 airports. 
+After estimating missing patronage data by looking at neighboring airports patronages, 14 airports without patronage remain. These must be in airports in disconnected subgraphs, because the algorithm would eventually reach them and assign a patronage otherwise. Investigations confirm that. We disregard these few dataless airports from disconnected subgraphs in the following analyses and thus end up with a network of 3125 airports. 
 
 
 \section{Basic Network Analysis}
 
 
-\section{Airline Subnetwork Analysis \& Comparison}
+\section{Airline Subgraph Analysis \& Comparison}
 
 
 \section{Airline Cooperation Opportunity}
 
-The possibility to provide convenient on-line connections to clients is an important factor that drives welfare gains through ailine cooperation according to E. E. Bailey and D. Liu \cite{airline_consolidation_and_consumer_welfare}.
+The possibility to provide convenient on-line connections to clients is an important factor that drives welfare gains through airline cooperation according to E. E. Bailey and D. Liu \cite{airline_consolidation_and_consumer_welfare}.
 
 \section{Reality Check: Vanilla Airlines}
 
 
-\section*{Acknowledgements}
+\section*{Acknowledgments}
 
 
 \bibliographystyle{IEEEtran}
