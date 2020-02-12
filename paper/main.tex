@@ -251,6 +251,14 @@ Estimated flows when estimating patronage based on neighboring airport's patrona
 
 The complete algorithm for passenger flow estimation can be found in the repository: ./scripts/estimate-passenger-flows.py
 
+\begin{figure}
+	\centering
+	\includegraphics[width=76mm]{imgs/runway-based-estimation-problem.png}
+	\caption{
+For Qaanaaq Airport there was no patronage data from Wikidata and no runway information. That's why it ended up with the default patronage value 1523. In this constallation it is impossible to choose passenger flows that even remotely satisfy the the patronages of airports with ids 10, 5446, 5448}
+	\label{fig:impossible_flows}
+\end{figure}
+
 \section{Basic Network Analysis}
 
 

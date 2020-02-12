@@ -59,8 +59,7 @@ def run(db_file):
 		labels = ["initial. min, max, sum: [{0:.2f}, {1:.2f}, {2:.2f}]".format(*min_max_sum)]
 
 	iterations = 120
-	plot_each = iterations / 4
-	last_plot = -1
+	plot_times = 5
 	factor = math.pow(0.9, 1 / iterations) 
 	p = 0
 	for iteration in range(0, iterations):
@@ -77,8 +76,7 @@ def run(db_file):
 		for i, airport in airports.items():
 			airport.recalc_flow_sum_and_deviation()
 		
-		if iteration - last_plot >= plot_each: 
-			last_plot = iteration 
+		if iteration < plot_times or iteration == iterations - 1: 
 			
 			if script_mode == "show":
 				min_max_sum = plot_flow_deviation_distribution(airports)
@@ -92,6 +90,8 @@ def run(db_file):
 	sys.stdout.write("\riterating 100%   \n")
 
 	if script_mode == "show": 
+		axes = pyplot.gca()
+		axes.set_ylim([-2,4])
 		pyplot.legend(labels, loc=2)
 		pyplot.xlabel('airports, ordered by flowDeviation')
 		pyplot.ylabel('flowDeviation')
