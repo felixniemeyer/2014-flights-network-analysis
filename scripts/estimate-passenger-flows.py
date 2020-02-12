@@ -59,7 +59,7 @@ def run(db_file):
 		labels = ["initial. min, max, sum: [{0:.2f}, {1:.2f}, {2:.2f}]".format(*min_max_sum)]
 
 	iterations = 120
-	plot_each = iterations / 12
+	plot_num = 5
 	last_plot = -1
 	factor = math.pow(0.9, 1 / iterations) 
 	p = 0
@@ -77,8 +77,7 @@ def run(db_file):
 		for i, airport in airports.items():
 			airport.recalc_flow_sum_and_deviation()
 		
-		if iteration - last_plot >= plot_each: 
-			last_plot = iteration 
+		if iteration < plot_num or iteration == iterations - 1: 
 			
 			if plot_figure:
 				min_max_sum = plot_flow_deviation_distribution(airports)
@@ -92,16 +91,13 @@ def run(db_file):
 	sys.stdout.write("\riterating 100%   \n")
 
 	if plot_figure: 
-		pyplot.title("deviation")
 		pyplot.legend(labels, loc=2)
-		pyplot.xlabel('nodes , ordered by flow_deviation')
-		pyplot.ylabel('flow_deviation $ln(FlowSum(n)/FlowDeviation(n))$')
+		pyplot.xlabel('nodes, ordered by flowDeviation')
+		pyplot.ylabel('flowDeviation $ln(FlowSum(n)/FlowDeviation(n))$')
+		pyplot.savefig('./results/flow_estimation_{0}_iterations.png'.format(iterations), dpi=300, bbox_inches='tight')
 
 	if script_mode == "show":
 		pyplot.show()
-
-	if save_figure: 
-		pyplot.savefig('./results/flow_estimation_{0}_iterations.png'.format(iterations), dpi=300)
 
 	if script_mode == "write_csv":
 		routes_csv = open('./temp_passenger_flows.csv', 'w')
@@ -149,7 +145,8 @@ if len(sys.argv) > 2:
 	save_figure = sys.argv[2] == "save_figure"
 	if save_figure:
 		db_file_i += 1
-	db_file = sys.argv[db_file_i]
+	if len(sys.argv) > 3: 
+		db_file = sys.argv[db_file_i]
 else:
 	save_figure = False
 

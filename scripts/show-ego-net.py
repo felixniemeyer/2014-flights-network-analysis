@@ -22,4 +22,6 @@ nx.draw(
 	node_color=['#993322' if n == k else '#4477ee' for k in S.nodes],
 	node_size=100
 )
+plt.savefig('./results/ego_graph_{0}.png'.format(n))
 plt.show()
+
