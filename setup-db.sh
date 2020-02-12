@@ -56,4 +56,3 @@ rm ./temp_flow_estimation_metrics.csv
 
 printf "\ndone, enjoy.\n\n" 
 
-
