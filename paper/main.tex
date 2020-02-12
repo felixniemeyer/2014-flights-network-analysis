@@ -40,7 +40,13 @@
 \maketitle
 
 \begin{abstract}
-	In this case study we are looking at a dataset about air travel in 2014. We implement some mechanisms to clean the data, as well as mechanisms to enrich this dataset with information we query from wikidata. We estimate some missing data. Starting from there, we analyze some network characteristics for the whole network as well as airline-specific sub-networks. We compare airline-specific networks and find relations between their network's characteristics and their business model. We propose one metric that plays a role in forecasting whether a cooperation between two airlines is advantageous and use this metric to generate an alliances landscape. We compare it's predictive correctness to the real world by looking at the formation of Vanilla Airlines which occurred in the year after the one our data stems from. 
+In this case study we are looking at a dataset about air travel in 2014. 
+We implement some mechanisms to clean the data, as well as mechanisms to enrich this dataset with information we query from wikidata.
+We estimate some missing data.
+Starting from there, we analyze some network characteristics for the whole network as well as airline-specific sub-networks.
+We compare airline-specific networks and find relations between their network's characteristics and their business model.
+We propose one metric that plays a role in forecasting whether a cooperation between two airlines is advantageous and use this metric to generate an alliances landscape.
+We compare it's predictive correctness to the real world by looking at the formation of Vanilla Airlines which occurred in the year after the one our data stems from.
 \end{abstract}
 
 \section{Data Description}
@@ -137,36 +143,31 @@ while r != pr:
 
 This second approach yields much nicer estimations, as we will see after estimating the flows between airports. 
 
+After estimating missing patronage data by looking at neighboring airports patronages, 14 airports without patronage remain. These must be in airports in disconnected subgraphs, because the algorithm would eventually reach them and assign a patronage otherwise. Investigations confirm that. We disregard these few dataless airports from disconnected subgraphs in the following analyses and thus end up with a network of 3125 airports. 
+
 The flows are estimated by choosing reasonable initial values and then applying corrections iteratively to approach a situation where the sum of the estimated flows for each airport equal its patronage value.
 The average initial values for an edge between airport $p$ and $q$ is chosen as: 
-
 \begin{equation}
 avgFlow(pq) = \dfrac{patronage(p) * patronage(q)}{degree(p) * degree(q)}
 \end{equation}
-
 Remember that we are handling a multi-edge directed graph here. 
-
 \begin{equation}
 E = \{(pql) | \exists\ \text{route from}\ p\ \text{to}\ q\ \text{by}\ l\}
 \end{equation}
-
 where $p$ and $q$ are airports and $l$ is an airline.
 Let us introduce a function $E(pq)$ that returns all edges between $p$ and $q$ disregarding the direction and operating airline. 
 \begin{equation}
 E(pq) = \{pql | \exists_{l \in L}:pql \in E \lor qpl \in E\}
 \end{equation}
-
 where $L$ is the set of airlines.
 
 And let us introduce the function $E(p)$ that returns all edges from and to an airport $p$ by every airline: 
 \begin{equation}
 E(p) = \{rsl | (r=p \lor s=p) \land \exists_{l \in L}:rsl \in E \}
 \end{equation}
-
 The Edges of the graph are thus triplets of a source airport, destination airport and an airline.
 There may be multiple edges between two airports pointing in different directions and/or operated by different airlines.
 We could assume an equal distribution of the flows among the edges. But we chose trying to be closer to reality by weighting the flow of an edge between two airports $p$ and $q$, that is operated by airline $l$, by the geometric mean of the number of edges airline $l$ operates at airport $p$ and number of edges airline $l$ operates at airport $q$: 
-
 \begin{equation}
 \begin{aligned}
 &flow(pql) =\\
@@ -175,53 +176,80 @@ We could assume an equal distribution of the flows among the edges. But we chose
 * weight(pql) 
 \end{aligned}
 \end{equation}
-
 where $noe(pq)$ is the number of edges between airport $p$ and $q$ and $weight(pql)$ is defined as follows: 
-
 \begin{equation}
 \begin{aligned}
 &weight(pql) = \dfrac{\sqrt{degree_{l}(p) * degree_{l}(q)}}{pnws(pql)}
 \end{aligned}
 \end{equation}
-
 where the $pnws(pq)$ (Pre Normalization Weight Sum) is just the sum of the non-normalized weights of all the routes from different airlines to normalize the weights. 
-
 \begin{equation}
 \begin{aligned}
 &pnws(pq) = \\
 ={}&\displaystyle\sum_{rsm \in E(pq)}(\sqrt{degree_{m}(r) * degree_{m}(s)})
 \end{aligned}
 \end{equation}
-
 where $degree_l(p)$ is the degree of airport $p$ in airline $l$'s subgraph, i.e. number of edges from and to airport $p$ operated by airline $l$.
 
 The ratios we choose here will stay intact over the course of the iterations in the next part of the algorithm. 
 In every iteration, we traverse all airports and for every airport we calculate the sum of current flows values of all routes. 
-
 \begin{equation}
 \begin{aligned}
 flowSum(p) = \displaystyle\sum_{pql \in E \cup pu \in E}flow_{pql}
 \end{aligned}
 \end{equation}
-
 Difference between the patronage and the current sum of passenger flows of incoming and outgoing routes. 
-Then, for each airport we calculate 
-
+Then, for each airport we calculate the difference between its patronage and the current sum of flows.
 \begin{equation}
 \begin{aligned}
-& flow_{pql}' = flow_{abo} \\
-& \displaystyle\sum_{a \in A | ab \in E \lor ba \in E} 
+flowDiff(p) = patronage(p) - flowSum(p) 
+\end{aligned}
+\end{equation}
+With this information given, we can now calculate for every edge $pql$ the change in its flow. 
+\begin{equation}
+\begin{aligned}
+\forall_{pql \in E(p)}: & \\
+& \Delta flow(pql) = & \\ 
+& ={} \dfrac{flow(pql)}{flowSum(p)}flowDiff(p) \\
+& +{} \dfrac{flow(pql)}{flowSum(q)}flowDiff(q) \\
+\end{aligned}
+\end{equation}
+and the more perfect flows for the edges and starting point for the next itaration are
+\begin{equation}
+\begin{aligned}
+\forall_{pql \in E(p)}: & \\
+& flow'(pql) = flow_{abo} + \Delta flow(pql)
 \end{aligned}
 \end{equation}
 
-<describe iteration step>
+In order to look at the results of this algorithm we introduce a measure 
+\begin{equation}
+flowDeviation(p) = ln(flowSum(p)/patronage(p))
+\end{equation}
+it expresses how well the sum of estimated flows match the patronage, that we know for the airport. If the flows are half the patronage the absolute value of $flowDeviation$ will be the same as when the current flows are twice the actual patronage number. 
+We compare the results between estimating the patronages based on the runway sizes Figure~\ref{fig:flow_deviation_runway} and estimating the patronages based on neighboring airports Figure~\ref{fig:flow_deviation}. 
+The blue line shows the $flowDeviation$ distribution of the initial flow values.
+The other almost totally overlapping lines show the $flowDeviation$ distribution after a couple of iterations. 
 
-<Show results, compare runway to neighbor based estimation>
+The bad results of the estimations when estimating patronage values from runways stem from constellations like in Figure~\ref{fig:impossible_flows}, when choosing flows to match the patronage values are impossible. 
 
-The complete algorithm for passenger flow estimation is too long for being included in this document. You can find it in the repository: ./scripts/estimate-passenger-flows.py
+\begin{figure}
+	\centering
+	\includegraphics[width=76mm]{imgs/flow_estimation_runway_approach_deviation.png}
+	\caption{
+Estimated flows when estimating patronage based on the runway size }
+	\label{fig:flow_deviation_runway}
+\end{figure}
 
-After estimating missing patronage data by looking at neighboring airports patronages, 14 airports without patronage remain. These must be in airports in disconnected subgraphs, because the algorithm would eventually reach them and assign a patronage otherwise. Investigations confirm that. We disregard these few dataless airports from disconnected subgraphs in the following analyses and thus end up with a network of 3125 airports. 
+\begin{figure}
+	\centering
+	\includegraphics[width=76mm]{imgs/results/flow_estimation_120_iterations.png}
+	\caption{
+Estimated flows when estimating patronage based on neighboring airport's patronage}
+	\label{fig:flow_deviation}
+\end{figure}
 
+The complete algorithm for passenger flow estimation can be found in the repository: ./scripts/estimate-passenger-flows.py
 
 \section{Basic Network Analysis}
 
