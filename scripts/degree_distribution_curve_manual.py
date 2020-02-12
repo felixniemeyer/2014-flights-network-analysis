@@ -34,7 +34,7 @@ def f(x, c, a):
 	return c * np.power(x, -a)
 
 def f_log(x, c, a): 
-	return np.log(f(np.exp(x), c, a))
+	return f(np.exp(x), c, a)
 
 # manual estimation 
 mc = 4900
@@ -45,7 +45,7 @@ ma = 1.55
  
 # least square fit on log
 log_degrees = np.log(degrees)
-((lc, la), pcov) = scipy.optimize.curve_fit(f_log, np.log(degrees), np.log(node_counts), p0=(mc, ma)) 
+((lc, la), pcov) = scipy.optimize.curve_fit(f_log, degrees, np.log(node_counts), p0=(mc, ma)) 
 
 x = np.logspace(1,np.log10(max_degree/10),100)
 

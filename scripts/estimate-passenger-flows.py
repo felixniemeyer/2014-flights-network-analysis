@@ -59,7 +59,7 @@ def run(db_file):
 		labels = ["initial. min, max, sum: [{0:.2f}, {1:.2f}, {2:.2f}]".format(*min_max_sum)]
 
 	iterations = 120
-	plot_each = iterations / 12
+	plot_each = iterations / 4
 	last_plot = -1
 	factor = math.pow(0.9, 1 / iterations) 
 	p = 0
@@ -92,13 +92,12 @@ def run(db_file):
 	sys.stdout.write("\riterating 100%   \n")
 
 	if script_mode == "show": 
-		pyplot.title("deviation")
 		pyplot.legend(labels, loc=2)
-		pyplot.xlabel('nodes , ordered by flow_deviation')
-		pyplot.ylabel('flow_deviation $ln(FlowSum(n)/FlowDeviation(n))$')
+		pyplot.xlabel('airports, ordered by flowDeviation')
+		pyplot.ylabel('flowDeviation')
 		pyplot.savefig(
 			'./results/flow_estimation_{0}_iterations.png'.format(iterations),
-			dpi=300
+			dpi=300,
 			bbox_inches='tight'
 		)
 		pyplot.show()
