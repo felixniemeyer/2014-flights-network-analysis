@@ -12,7 +12,7 @@ def calculateForGraph(G):
 	largeness = 0
 	for i in range(n): 
 		for j in range(m): 
-			if square[i,j] > 0: #and adjm[i,j] = 0 just an idea, sai idea: i != j
+			if square[i,j] > 0: #and adjm[i,j] = 0 and i != j
 				sa_node = G.nodes[nodes[i]]
 				da_node = G.nodes[nodes[j]]
 				largeness += math.sqrt(sa_node["patronage"] * da_node["patronage"])
