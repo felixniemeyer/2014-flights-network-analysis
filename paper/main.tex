@@ -324,10 +324,244 @@ For Qaanaaq Airport there was no patronage data from Wikidata and no runway info
 Arvidsjaur Airport is only connected to Lycksele Airport but has a more than twice as high patronage than Lycksele Airport}
 	\label{fig:worst_flow_fit}
 \end{figure}
-\section{Basic Network Analysis}
 
+
+
+\section{Basic Network Analysis}
+Initially, we would like to analyse the entire worldwide airline network, and provide some insights regarding the airline industry.
+Since a particular route could be provided by multiple Airline Companies, the final network that we come up with is a Multiple Directed Network.
+The attributes of each edge in this network included both the geometrical distance and the average passenger flow of that route (edge). 
+As we can see from the Table~\ref{Tab:distance_metrics}, the diameter of the entire network is given along with the Total Distance of the routes and the Average Distance of routes in a network.  
+
+\begin{center}
+\begin{table}[ht]	
+ \begin{tabular}{| c | c | c |}
+ \hline
+ \textbf{Diameter (km)} & \textbf{Total Dist.(km)} & \textbf{Average Dist.(km)} \\ [0.5ex]
+ \hline
+ 18834 & 126681574 & 1889.72 \\
+ \hline
+ \end{tabular}
+\caption{Distance Metrics of the Network}
+\label{Tab:distance_metrics}	 
+\end{table}
+\end{center}
+
+We currently do not have the ability to calculate centrality parameters like Eigenvector, Closeness or Betweenness Centrality for a Multidirected Graph. So we will be mainly looking at Degree Centrality of the entire network as shown in Figure~\ref{fig:degree_centrality}.
+This is because Degree Centrality is the only Centrality available for Multiple Directed Graphs.
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/degree_centrality_whole_network.png}
+        \caption{
+The degree centrality of the entire network}
+        \label{fig:degree_centrality}
+\end{figure}
+
+The degree centrality is given by the formula:
+\begin{equation}
+	Degree Centrality=d_i/(n-1)
+\end{equation}
+
+Just by analysing the graph, we can say that the degree centrality distributrion is following the Power Law Distribution.
 
 \section{Airline Subgraph Analysis \& Comparison}
+
+Airline Networks can be mainly divided into two different types of networks. Full Service Airlines which are also called as Legacy Carriers, and Low Cost Airlines or Low Cost Carriers.  
+Full Service Airlines generally provide free baggage allowance, meals, drinks, seat selection and in-flight entertainment at no extra charge.
+Low Cost Carriers will usually collect ancillary revenue for all or most of the above these amentities.
+Most of the time, Low Cost Carriers operate in a specific regions.
+These specific regions could be within countries, or within continents, or within specific part of the continents.
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/united_airline_network.png}
+        \caption{
+Network of United Airlines}
+        \label{fig:united_airline}
+\end{figure}
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/american_airline_network.png}
+        \caption{
+Network of American Airlines}
+        \label{fig:american_airline}
+\end{figure}
+
+
+
+Long haul low cost carriers are provided by very few carriers in the world, as it is not feasible to offer long routes with low cost and also high frequency, according to Robert L. Candall, former CEO of American Airlines.\cite{long_haul_lcc_model}
+The only example we have of a long haul low cost carrier is Norwegian Airlines, as they offer flights from Scandinavia to different cities in the United States.
+But this is more an exception, than the norm. For the long haul low cost carriers to survive and adapt, they must continue to innovate. Their business models should focus on three new emerging carrier types: Network, Product and Price Specialist, according to John G.Wensveen and Ryan Leick.\cite{long_haul_lcc_new_model}
+
+Before we look at the differences in the network parameters of these two types of airlines, there are major differences in the network architecture itself.
+While the major Full Service Airlines often have the Network Type of "Hub and Spoke", the Low Cost Carriers are known to have Point to Point Network Type, according to research by Cook G.N and Goodwin, J.\cite{airline_network_comparison}
+This "Hub and Spoke" network connection can be seen in the network graph of United Airlines and American Airlines given in Figure~\ref{fig:united_airline} and Figure~\ref{fig:american_airline} respectively. These two airlines are prime example of Full Service Airlines. 
+
+Similarly we see the "Point to Point" Network in Low Cost Carriers like Ryan Air in Figure~\ref{fig:ryan_air} and Southwest Airlines in Figure~\ref{fig:southwest_airline}.
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/ryan_air_network.png}
+        \caption{
+Network of Ryan Air}
+        \label{fig:ryan_air}
+\end{figure}
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/southwest_airline_network.png}
+        \caption{
+Network of Southwest Airlines}
+        \label{fig:southwest_airline}
+\end{figure}
+
+\begin{table}[ht]
+\begin{center}
+ \begin{tabular}{| c | c |}
+ \hline
+ \textbf{Airline} & \textbf{Diameter (km)} \\ [0.5ex]
+ \hline
+ United Airlines & 12979 \\
+ \hline
+ American Airlines & 14076 \\
+ \hline
+ Delta Airlines & 13581 \\
+ \hline
+ Ryan Air & 3698 \\
+ \hline
+ Southwest Airlines & 3757 \\
+ \hline
+ Air Asia & 2914 \\
+ \hline
+ China Southern & 11637 \\
+ \hline
+ China Eastern & 11896 \\
+ \hline
+ \end{tabular}
+\caption{Diameter of Major Airlines}
+\label{Tab:diameter_metrics}
+\end{center}
+\end{table}
+
+
+
+\begin{table}[ht]
+\begin{center}
+ \begin{tabular}{| c | c | c |}
+ \hline
+ \textbf{Airline} & \textbf{Mean (km)} & \textbf{Median (km)} \\ [0.5ex]
+ \hline
+ United Airlines & 2353.69 & 1393 \\
+ \hline
+ American Airlines & 2321.23 & 1371 \\
+ \hline
+ Delta Airlines & 2352.17 & 1341 \\
+ \hline
+ Ryan Air & 1490.21 & 1435.5 \\
+ \hline
+ Southwest Airlines & 1398.37 & 1267 \\
+ \hline
+ Air Asia & 1328.57 & 1254 \\
+ \hline
+ China Southern & 1459.95 & 1127 \\
+ \hline
+ China Eastern & 1427.81 & 1075 \\
+ \hline
+ \end{tabular}
+\caption{Distance Metrics of Major Airlines}
+\label{Tab:distance_airlines}
+\end{center}
+\end{table}
+
+
+\begin{table}[ht]
+\begin{center}
+ \begin{tabular}{| c | c | c |}
+ \hline
+ \textbf{Airline} & \textbf{Mean Flow} & \textbf{Median Flow} \\ [0.5ex]
+ \hline
+ United Airlines & 85159 & 43286 \\
+ \hline
+ American Airlines & 67983.40 & 47185 \\
+ \hline
+ Delta Airlines & 76345.95  & 47123 \\
+ \hline
+ Ryan Air & 31268.60 & 26857.50 \\
+ \hline
+ Southwest Airlines & 65692.70  & 61590 \\
+ \hline
+ China Southern & 53100  & 43729.50 \\
+ \hline
+ China Eastern & 52610.60  & 43294 \\
+ \hline
+ \end{tabular}
+\caption{Passenger Flow of Major Airlines}
+\label{Tab:passenger_flow_airlines}
+\end{center}
+\end{table}
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/united_eigenvalue_centrality.png}
+        \caption{
+Eigenvalue Centrality of United Airlines}
+        \label{fig:united_air_ec}
+\end{figure}
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/delta_eigenvalue_centrality.png}
+        \caption{
+Eigenvalue Centrality of Delta Airlines}
+        \label{fig:delta_air_ec}
+\end{figure}
+
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/american_eigenvalue_centrality.png}
+        \caption{
+Eigenvalue Centrality of American Airlines}
+        \label{fig:american_air_ec}
+\end{figure}
+
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/ryan_eigenvalue_centrality.png}
+        \caption{
+Eigenvalue Centrality of Ryan Air}
+        \label{fig:ryan_air_ec}
+\end{figure}
+
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/southwest_eigenvalue_centrality.png}
+        \caption{
+Eigenvalue Centrality of Southwest Airlines}
+        \label{fig:southwest_air_ec}
+\end{figure}
+
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/chinasouthern_eigenvalue_centrality.png}
+        \caption{
+Eigenvalue Centrality of China Southern Airlines}
+        \label{fig:chinasouthern_air_ec}
+\end{figure}
+
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/chinaeastern_eigenvalue_centrality.png}
+        \caption{
+Eigenvalue Centrality of China Eastern Airlines}
+        \label{fig:chinaeastern_air_ec}
+\end{figure}
 
 
 \section{Airline Cooperation Opportunity}
