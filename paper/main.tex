@@ -396,9 +396,60 @@ The degree centrality is given by the formula:
 	Degree Centrality=d_i/(n-1)
 \end{equation}
 
+Just by analysing the graph, we can say that the degree centrality distributrion is following the Power Law Distribution.
+
 \section{Airline Subgraph Analysis \& Comparison}
 
-Just by analysing the graph, we can say that the degree centrality distributrion is following the Power Law Distribution. 
+Airline Networks can be mainly divided into two different types of networks. Full Service Airlines which are also called as Legacy Carriers, and Low Cost Airlines or Low Cost Carriers.  
+Full Service Airlines generally provide free baggage allowance, meals, drinks, seat selection and in-flight entertainment at no extra charge.
+Low Cost Carriers will usually collect ancillary revenue for all or most of the above these amentities.
+Most of the time, Low Cost Carriers operate in a specific regions.
+These specific regions could be within countries, or within continents, or within specific part of the continents.
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/united_airline_network.png}
+        \caption{
+Network of United Airlines}
+        \label{fig:united_airline}
+\end{figure}
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/american_airline_network.png}
+        \caption{
+Network of American Airlines}
+        \label{fig:american_airline}
+\end{figure}
+
+
+
+Long haul low cost carriers are provided by very few carriers in the world, as it is not feasible to offer long routes with low cost and also high frequency.
+The only example we have of a long haul low cost carrier is Norwegian Airlines, as they offer flights from Scandinavia to different cities in the United States.
+But this is more an exception, than the norm. 
+
+
+Before we look at the differences in the network parameters of these two types of airlines, there are major differences in the network architecture itself.
+While the major Full Service Airlines often have the Network Type of "Hub and Spoke", the Low Cost Carriers are known to have Point to Point Network Type.
+This "Hub and Spoke" network connection can be seen in the network graph of United Airlines and American Airlines given in Figure~\ref{fig:united_airline} and Figure~\ref{fig:american_airline} respectively. These two airlines are prime example of Full Service Airlines. 
+
+Similarly we see the "Point to Point" Network in Low Cost Carriers like Ryan Air in Figure~\ref{fig:ryan_air} and Southwest Airlines in Figure~\ref{fig:southwest_airline}.
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/ryan_air_network.png}
+        \caption{
+Network of Ryan Air}
+        \label{fig:ryan_air}
+\end{figure}
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/southwest_airline_network.png}
+        \caption{
+Network of Southwest Airlines}
+        \label{fig:southwest_airline}
+\end{figure}
 
 \section{Airline Cooperation Opportunity}
 
