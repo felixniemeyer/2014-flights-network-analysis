@@ -26,17 +26,23 @@ fig.add_trace(go.Scattergeo(
     )))
 
 flight_paths = []
+lons = []
+lats = []
 for i in range(len(df_flight_paths)):
-    fig.add_trace(
-        go.Scattergeo(
-            locationmode = 'USA-states',
-            lon = [df_flight_paths['start_lon'][i], df_flight_paths['end_lon'][i]],
-            lat = [df_flight_paths['start_lat'][i], df_flight_paths['end_lat'][i]],
-            mode = 'lines',
-            line = dict(width = 1,color = 'red'),
-            opacity = float(df_flight_paths['cnt'][i]) / float(df_flight_paths['cnt'].max()),
-        )
+    # None interrupts lines and makes it possible to draw multiple disconnected lines.
+    lons += [df_flight_paths['start_lon'][i], df_flight_paths['end_lon'][i], None] 
+    lats += [df_flight_paths['start_lat'][i], df_flight_paths['end_lat'][i], None]
+
+fig.add_trace(
+    go.Scattergeo(
+        locationmode = 'USA-states',
+        lon = lons,
+        lat = lats,
+        mode = 'lines',
+        line = dict(width = 1,color = 'red'),
+        opacity = 0.5 
     )
+)
 
 fig.update_layout(
     title_text = 'Feb. 2011 American Airline flight paths<br>(Hover for airport names)',
@@ -48,7 +54,7 @@ fig.update_layout(
         landcolor = 'rgb(243, 243, 243)',
         countrycolor = 'rgb(204, 204, 204)',
     ),
-	height=700,
+    height=700,
 )
 
 fig.show()
