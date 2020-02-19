@@ -397,9 +397,11 @@ Long haul low cost carriers are provided by very few carriers in the world, as i
 The only example we have of a long haul low cost carrier is Norwegian Airlines, as they offer flights from Scandinavia to different cities in the United States.
 But this is more an exception, than the norm. For the long haul low cost carriers to survive and adapt, they must continue to innovate. Their business models should focus on three new emerging carrier types: Network, Product and Price Specialist, according to John G.Wensveen and Ryan Leick.\cite{long_haul_lcc_new_model}
 
+
 Before we look at the differences in the network parameters of these two types of airlines, there are major differences in the network architecture itself.
 While the major Full Service Airlines often have the Network Type of "Hub and Spoke", the Low Cost Carriers are known to have Point to Point Network Type, according to research by Cook G.N and Goodwin, J.\cite{airline_network_comparison}
 This "Hub and Spoke" network connection can be seen in the network graph of United Airlines and American Airlines given in Figure~\ref{fig:united_airline} and Figure~\ref{fig:american_airline} respectively. These two airlines are prime example of Full Service Airlines. 
+
 
 Similarly we see the "Point to Point" Network in Low Cost Carriers like Ryan Air in Figure~\ref{fig:ryan_air} and Southwest Airlines in Figure~\ref{fig:southwest_airline}.
 
@@ -418,6 +420,31 @@ Network of Ryan Air}
 Network of Southwest Airlines}
         \label{fig:southwest_airline}
 \end{figure}
+
+
+We can also appreciate these major differences by analysing various parameters of the network.
+As shown in Table~\ref{Tab:distance_airlines}, we can see that the Full Service Airlines like United Airlines, American Airlines and Delta Airlines, offer routes over really long distances.
+That is the reason why the geometric distance diameters of these airline networks are easily over 12000 kms.
+On the other hand, Low Cost Carriers always offer routes within a certain region, such as only within Europe (Ryan Air) or only within United States (Southwest Airlines).
+And as expected, the diameter of these airline networks are below 4000 kms. 
+
+
+The differences are also apparent when we look at the mean geometric distance of all the routes offered by a particular airline.
+Full Service Carriers show an average route distance of around 2300 kms, while the Low Cost Carriers show that their average route distance is about 1400 kms, which is significantly lower.
+
+
+We would also like to point out the case of China Southern Airlines and China Eastern Airlines.
+Looking at only the diameter, we can conclude that the Network is as large as United or Delta Airlines.
+But when we look at the mean, they are only around 1400 kms, which represent airlines like RyanAir or Southwest Airlines.
+This discrepancy can be explained by analysing the median geometric distance of these networks.
+These Chinese Airlines have a median of around 1100 kms, which means they have a lot of routes which are within China region only. 
+And looking at the full network, we can also say that, the main reason their diameter is over 12000 kms is because they had recently started to offer few routes to countries like Canada, United States and Germany.
+Although these are large distances, due to high number of local routes within China, the mean route length of this network, turns out to be much more lesser and comparable to Low Cost Carriers. 
+
+     
+
+
+
 
 \begin{table}[ht]
 \begin{center}
@@ -499,6 +526,23 @@ Geometrical Distance Distrubution}
         \label{fig:geometric_distr}
 \end{figure}
 
+Figure~\ref{fig:geometric_distr} provides us the geometric route distance distribution for airlines United, Lufthansa, RyanAir and Southwest. Here too, there is an apparent distinction between the Full Service Airlines and the Low Cost Carriers. 	
+Ryan Air and Southwest offer so many routes around 1000 km range, that the peak of their distribution is also around that value.
+And of course, their routes stop at a maximum distance of around 4000 kms. 
+Looking at the Full Service Carriers, though the global peak of the distribution of United and Lufthansa is also around the same distance of 1000 kms, we can see that there is a second small peak at around 6000 kms. This is nothing but the average route distance for Transatlantic flights between United States and Europe. 
+Both of these airlines offer a considerable number of these routes, that it shows in the distribution curve distinctly. 
+
+
+The centrality distributions (both eigenvector and closeness) of these four airlines also provide us with deep insights into their route network. 
+We see that in both the Figures~\ref{fig:eigen_distr} and ~\ref{fig:closeness_distr}, Ryan Air and Southwest have more airports with higher centrality value.
+We could say that the centrality of their network is distributed across many airports, instead of relying on few airports with really high centrality values. 
+The scenario of having few airports with really high centrality value is seen in the case of Full Service Airlines Lufthansa and United Airlines. They have high number of airports with low centrality, and few select airports with high centrality values.
+If we look at the network diagram that was previously shown in Figure~\ref{fig:united_airline}, it is apparent that these high centrality airports are basically the hubs of these networks.  
+
+
+
+
+
 \section{Airline Cooperation Opportunity}
 
 The possibility to provide convenient on-line connections to clients is an important factor that drives welfare gains through airline cooperation according to E. E. Bailey and D. Liu \cite{airline_consolidation_and_consumer_welfare}.
@@ -527,6 +571,30 @@ To assess the potential of a merge $\Potential(l,m)$ we divide the Largeness of 
 \end{equation}
 
 \section{Outlook: Improving the metric}
+
+The main metric of our analysis $\Largeness_{2}$, is currently dependent on Patronages in each airport and the routes available for each airline. Though it already results in providing results which are close to the real world, we can still improve it with few changes in the metric or data. With access to the exact population data for each airport, the results would be more accurate.
+
+Another way to improve the metric, is bringing in the centrality of each airport as a weighting factor in the analysis, especially the eigenvector centrality. 
+Unlike degree centrality, which only looks at the number of connections or neighbours for one particular airport, eigenvector centrality looks at both the number, and the centrality of the neighbours for each airport.\cite{eigenvector_centrality}
+There is a not insignificant differences between the patronages of each airport and the eigenvector centrality of each airport in our data, as shown in Figure~\ref{fig:patronage_eigenvector}.
+Thus, considering eigenvector of each airport and using it in a new metric could provide us with different results, from what we achieved through$\Largeness_{2}$ metric. 
+We should also look at the interactions in the network, from the side of airports. Airports also have a significant amount of bargaining power, since they rent their space to be used by the airlines. 
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=80mm]{imgs2/results/patronage_eigenvector.png}
+	\caption{
+	Patronage vs Eigenvector Distrubution}
+\label{fig:patronage_eigenvector}
+\end{figure}
+
+
+
+
+In the real world, profit of each airlines also plays a major factor in the formation of alliances. The typical cost of the airlines are divided into three categories: Flight (Direct) Operating Costs as 50\%, Ground Operating Costs as 30\% and System Operating Costs as 20\%. \cite{airline_operating_cost}
+Out of the above three categories, Ground Operating Costs, are especially related to fees to be paid to airports such as aircraft landing fees and reservation charges. 
+Having a coalition with many airlines together, would increase the bargaining power of these alliances, and help in reducing the costs to be paid to these airports. 
 
 
 \section*{Acknowledgments}
