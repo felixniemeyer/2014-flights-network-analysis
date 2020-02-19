@@ -37,7 +37,7 @@
 
 % for the equation stuff 
 \DeclareMathOperator{\avgFlow}{avgFlow}
-\DeclareMathOperator{\patronage}{patronage}
+\DeclareMathOperator{\patronage}{patr}
 \DeclareMathOperator{\flow}{flow}
 \DeclareMathOperator{\weight}{weight}
 \DeclareMathOperator{\PNWS}{PNWS}
@@ -46,8 +46,10 @@
 \DeclareMathOperator{\flowSum}{flowSum}
 \DeclareMathOperator{\flowDeviation}{flowDeviation}
 \DeclareMathOperator{\flowDiff}{flowDiff}
-\DeclareMathOperator{\Largeness}{Largeness}
-\DeclareMathOperator{\Potential}{Potential}
+\DeclareMathOperator{\Largeness}{largeness}
+\DeclareMathOperator{\Potential}{potential}
+\DeclareMathOperator{\WEVC}{WEVC}
+\DeclareMathOperator{\Nodes}{Nodes}
 
 \begin{document}
 
@@ -339,12 +341,12 @@ As we can see from the Table~\ref{Tab:distance_metrics}, the diameter of the ent
 \begin{table}[ht]	
  \begin{tabular}{| c | c | c |}
  \hline
- \textbf{Diameter (km)} & \textbf{Total Dist.(km)} & \textbf{Average Dist.(km)} \\ [0.5ex]
+ \textbf{Diameter} & \textbf{Total Dist.} & \textbf{Average Dist.} \\ 
  \hline
  18834 & 126681574 & 1889.72 \\
  \hline
  \end{tabular}
-\caption{Distance Metrics of the Network}
+\caption{Distance Metrics of the Network in km}
 \label{Tab:distance_metrics}	 
 \end{table}
 \end{center}
@@ -452,7 +454,7 @@ Network of Southwest Airlines}
 \begin{center}
  \begin{tabular}{| l | r | r |}
  \hline
- \textbf{Airline} & \textbf{Mean Flow} & \textbf{Median Flow} \\ [0.5ex]
+ \textbf{Airline} & \textbf{Mean Flow} & \textbf{Median Flow} \\ 
  \hline
  United & 85159 & 43286 \\
  \hline
@@ -474,69 +476,8 @@ Network of Southwest Airlines}
 \end{center}
 \end{table}
 
-\begin{figure}
-        \centering
-        \includegraphics[width=80mm]{imgs2/results/united_eigenvalue_centrality.png}
-        \caption{
-Eigenvalue Centrality of United Airlines}
-        \label{fig:united_air_ec}
-\end{figure}
 
-\begin{figure}
-        \centering
-        \includegraphics[width=80mm]{imgs2/results/delta_eigenvalue_centrality.png}
-        \caption{
-Eigenvalue Centrality of Delta Airlines}
-        \label{fig:delta_air_ec}
-\end{figure}
-
-
-\begin{figure}
-        \centering
-        \includegraphics[width=80mm]{imgs2/results/american_eigenvalue_centrality.png}
-        \caption{
-Eigenvalue Centrality of American Airlines}
-        \label{fig:american_air_ec}
-\end{figure}
-
-
-\begin{figure}
-        \centering
-        \includegraphics[width=80mm]{imgs2/results/ryan_eigenvalue_centrality.png}
-        \caption{
-Eigenvalue Centrality of Ryan Air}
-        \label{fig:ryan_air_ec}
-\end{figure}
-
-
-\begin{figure}
-        \centering
-        \includegraphics[width=80mm]{imgs2/results/southwest_eigenvalue_centrality.png}
-        \caption{
-Eigenvalue Centrality of Southwest Airlines}
-        \label{fig:southwest_air_ec}
-\end{figure}
-
-
-\begin{figure}
-        \centering
-        \includegraphics[width=80mm]{imgs2/results/chinasouthern_eigenvalue_centrality.png}
-        \caption{
-Eigenvalue Centrality of China Southern Airlines}
-        \label{fig:chinasouthern_air_ec}
-\end{figure}
-
-
-\begin{figure}
-        \centering
-        \includegraphics[width=80mm]{imgs2/results/chinaeastern_eigenvalue_centrality.png}
-        \caption{
-Eigenvalue Centrality of China Eastern Airlines}
-        \label{fig:chinaeastern_air_ec}
-\end{figure}
-
-
-\section{Airline Cooperation Opportunity}
+\section{Airline Cooperation Portential}
 
 The possibility to provide convenient on-line connections to clients is an important factor that drives welfare gains through airline cooperation according to E. E. Bailey and D. Liu \cite{airline_consolidation_and_consumer_welfare}.
 
@@ -548,26 +489,86 @@ There is a welfare gain, when a connection from A to B could previously only be 
 It is better for a consumer, to buy one ticket for a flight \mbox{A$\rightarrow$B$\rightarrow$C} from a single airline 
 Than buying two tickets for \mbox{A$\rightarrow$B} and \mbox{B$\rightarrow$C} from two distinct airlines.
 
-We construct a metric that captures this welfare gain for a potential merge of two airlines $l$ and $m$. 
+We construct a simple but powerfull metric that captures this welfare gain for a potential merge of two airlines $l$ and $m$. 
 
 First, we define a $\Largeness_{2}$ of an airline, that is the sum of all length-2 flights operated by this airline, weighted by the "popularity" of the two connected airports.
 We weight by the "popularity", because the welfare gain from a possibility to book a length-2 flight with a single ticket scales with the demand for this connection. 
 
 \begin{equation}
-\Largeness_{2}(l) = \sum{p,r \in P,\exists_{q}: pql \in E \and qrl \in E}: \sqrt(\patronage(p) * \patronage(r))
+\begin{aligned}
+ & \Largeness_{2}(l) = \\
+= & \displaystyle\sum_{p,r \in P,\exists_{q}: pql \in E \and qrl \in E}: \sqrt(\patronage(p) * \patronage(r))
+\end{aligned}
 \end{equation}
 
 To assess the potential of a merge $\Potential(l,m)$ we divide the Largeness of the joint airline network by the sum of the Largenesses of the separate airline networks. 
 
 \begin{equation}
-\Potential(l,m) = \dfrac{\Largeness_{2}(l \cup m)}{\Largeness_{2}(l) + \Largeness_{2}(m)} 
+\begin{aligned}
+& \Potential(l,m) = \\
+= & \dfrac{\Largeness_{2}(l \cup m)}{\Largeness_{2}(l) + \Largeness_{2}(m)} 
+\end{aligned}
 \end{equation}
 
-\section{Outlook: Improving the metric}
+Imagine the merge of two airlines yields many new 2-segment flight routes (look at the example in Figure~\ref{fig:potential-example}. If there is already a big overlap between the networks, $\Potential(l,m)$ might even be $< 1$ and thus discourage a merger or cooperation\footnote{this aspect of the $\Largeness$ metric might deserve criticism. See section "Outlook" for details.} 
 
+\begin{figure}
+	\centering
+	\includegraphics[width=76mm]{imgs/potential-example.png}
+	\caption{
+The merger of the blue and green airline networks yields six additional 2-segment connections}
+	\label{fig:potential-example}
+\end{figure}
+
+Because airlines from the same alliance can offer 2-segment flights in one ticket just as merged airlines can, this metric is also applicable for cooperation between airlines or alliance forming. 
+
+
+With this metric at hand, we can give answers to questions like: 
+
+"Which alliance should airline X join?"
+"Which airlines should form alliances?" 
+
+
+We don't linger on small questions like this and jump right into reorganizing the airline alliance landscape\footnote{this wording is supposed to be funny and caricaturing. Obviously, the factors that lead to forming of alliances are incredibly diverse ranging from historical reasons to interpersonal reasons, and we do not expect that a generated alliance landscape would exactly return the real alliances landscape, that we observe today. But we are looking for meta similarities, that describe the characteristics of an alliance landscape. As we assume $\Largeness_{2}$ to be an important factor in alliance formation, we a curious to find out which similarities we will be able to spot}. We implemented an algorithm that merges one airline with another, until only $N$ are left. In each step, the two arilines $l$ and $m$ are merged, that have the highest $\Potential$.
+
+We plot the result on a world map (Figure~\ref{fig:generated-alliance-map}) and compare it to the real alliance landscape (Figure~\ref{fig:real-alliance-map}. An remarkable similarity between the generated alliance landscape and the real one, is that one big alliance (green) is covering a lot of flights between the US, Europe and China, but is not much active in South America, South Africa, Australia or New Zealand. It also does not operate much in Canada in both the generated and real alliances landscape. 
+As expected, there are also differences: For example the generated alliance Landscape suggests spanish speaking South American Countries to be in the same alliance and have Brazilian oparators close to the green alliance, while in real life Buenos Aires is tied to the green alliance (Skyteam) while Brazil get's supplied by a mix of alliances. Japan for example belongs to Staralliance in the realworld while in the generated landscape it's a part of big green alliance. 
+
+\begin{figure}
+	\centering
+	\includegraphics[width=76mm]{imgs/generated-alliance-map.png}
+	\caption{
+The generated alliance landscape. Different colors mean different alliances. Green, Blue, Purple, Yellow. (Be aware, that by layering the networks of the different alliances on top of each other and routes in a higher layer covering the lower levels, the perception might be distorted.)}
+	\label{fig:generated-alliance-map}
+\end{figure}
+
+\begin{figure}
+	\centering
+	\includegraphics[width=76mm]{imgs/real-alliance-map.png}
+	\caption{
+The real alliance landscape. Skyteam(green), Staralliance(blue), Oneworld(purple), Vanilla(yellow)}
+	\label{fig:real-alliance-map}
+\end{figure}
+
+\section{Outlook: Improving the metric}
+The $\Largeness$ metric could be improved. Right now, when two airlines have the same 2-segment connections, after joining the network, those connections will be counted only once. There is no clear reasoning why these overlaps should discourage a merger. 
+
+A very promising different approach to capturing welfare that arises from additional single-ticket multi-segment flights through a merger or cooperation between airlines, is to look at the sum of the product of the weighted eigenvector centralities of common airports of the two merge candidates. 
+
+$\cap$
+
+\begin{equation}
+\begin{aligned}
+& \Potential_{\WEVC}(l, m) = \\
+ = & \sum_{p \in \Nodes(l \cap m)}: \WEVC_{l}(p) * \WEVC_{m}(p)
+\end{aligned}
+\end{equation}
+
+where $\Nodes(l \cap m)$ are all the common nodes of airlines $l$ and $m$ and $\WEVC_{x}(p)$ is the weighted eigenvector centrality of airport $p$ in airline $x$'s subgraph. 
+The weight for calculating the weighted eigenvector centrality in the subgraph of $x$ is the sum of flows of all edges operated by the respective airline. 
 
 \section*{Acknowledgments}
-
+We thank our professor IProf. Ph.D. konnikova and her Sofia Berdysheva for their brilliance, support and for giving this outstanding course at TUM.
 
 \bibliographystyle{IEEEtran}
 \bibliography{literature}
