@@ -199,7 +199,7 @@ while r != pr:
 \end{lstlisting}
 This second approach yields much nicer estimations, as we will see after estimating the flows between airports. 
 
-After estimating missing patronage data by looking at neighboring airports patronages, 14 airports without patronage remain. These must be in airports in disconnected subgraphs, because the algorithm would eventually reach them and assign a patronage otherwise. Investigations confirm that. We disregard these few dataless airports from disconnected subgraphs in the following analyses and thus end up with a network of 3125 airports. 
+After estimating missing patronage data by looking at neighboring airports patronages, 14 airports without patronage remain. These must be in airports in disconnected subgraphs, because the algorithm would eventually reach them and assign a patronage otherwise. Investigations confirm that. We disregard these few data-less airports from disconnected subgraphs in the following analyses and thus end up with a network of 3125 airports. 
 
 The flows are estimated by choosing reasonable initial values and then applying corrections iteratively to approach a situation where the sum of the estimated flows for each airport equal its patronage value.
 The average initial values for an edge between airport $p$ and $q$ is chosen as: 
@@ -272,7 +272,7 @@ With this information given, we can now calculate for every edge $pql$ the chang
 & +{} \dfrac{\flow(pql)}{\flowSum(q)}\flowDiff(q) \\
 \end{aligned}
 \end{equation}
-and the more perfect flows for the edges and starting point for the next itaration are
+and the more perfect flows for the edges and starting point for the next iteration are
 \begin{equation}
 \begin{aligned}
 \forall_{pql \in E(p)}: & \\
@@ -316,7 +316,7 @@ The complete algorithm for passenger flow estimation can be found in the reposit
 	\centering
 	\includegraphics[width=76mm]{imgs/runway-based-estimation-problem.png}
 	\caption{Worst situation in the scenario, where patronages are estimated based on runways and a default value: 
-For Qaanaaq Airport there was no patronage data from Wikidata and no runway information. That's why it ended up with the default patronage value 1523. In this constallation it is impossible to choose passenger flows that even remotely satisfy the the patronages of airports with ids 10 and 5446}
+For Qaanaaq Airport there was no patronage data from Wikidata and no runway information. That's why it ended up with the default patronage value 1523. In this constellation it is impossible to choose passenger flows that even remotely satisfy the the patronages of airports with ids 10 and 5446}
 	\label{fig:impossible_flows}
 \end{figure}
 
@@ -332,7 +332,7 @@ Arvidsjaur Airport is only connected to Lycksele Airport but has a more than twi
 
 
 \section{Basic Network Analysis}
-Initially, we would like to analyse the entire worldwide airline network, and provide some insights regarding the airline industry.
+Initially, we would like to analyze the entire worldwide airline network, and provide some insights regarding the airline industry.
 Since a particular route could be provided by multiple Airline Companies, the final network that we come up with is a Multiple Directed Network.
 The attributes of each edge in this network included both the geometrical distance and the average passenger flow of that route (edge). 
 As we can see from the Table~\ref{Tab:distance_metrics}, the diameter of the entire network is given along with the Total Distance of the routes and the Average Distance of routes in a network.  
@@ -351,7 +351,7 @@ As we can see from the Table~\ref{Tab:distance_metrics}, the diameter of the ent
 \end{table}
 \end{center}
 
-We currently do not have the ability to calculate centrality parameters like Eigenvector, Closeness or Betweenness Centrality for a Multidirected Graph. So we will be mainly looking at Degree Centrality of the entire network as shown in Figure~\ref{fig:degree_centrality}.
+We currently do not have the ability to calculate centrality parameters like Eigenvector, Closeness or betweenness Centrality for a Multidirected Graph. So we will be mainly looking at Degree Centrality of the entire network as shown in Figure~\ref{fig:degree_centrality}.
 This is because Degree Centrality is the only Centrality available for Multiple Directed Graphs.
 
 \begin{figure}
@@ -367,13 +367,13 @@ The degree centrality is given by the formula:
 	Degree Centrality=d_i/(n-1)
 \end{equation}
 
-Just by analysing the graph, we can say that the degree centrality distributrion is following the Power Law Distribution.
+Just by analyzing the graph, we can say that the degree centrality distribution is following the Power Law Distribution.
 
 \section{Airline Subgraph Analysis \& Comparison}
 
 Airline Networks can be mainly divided into two different types of networks. Full Service Airlines which are also called as Legacy Carriers, and Low Cost Airlines or Low Cost Carriers.  
 Full Service Airlines generally provide free baggage allowance, meals, drinks, seat selection and in-flight entertainment at no extra charge.
-Low Cost Carriers will usually collect ancillary revenue for all or most of the above these amentities.
+Low Cost Carriers will usually collect ancillary revenue for all or most of the above these amenities.
 Most of the time, Low Cost Carriers operate in a specific regions.
 These specific regions could be within countries, or within continents, or within specific part of the continents.
 
@@ -399,9 +399,11 @@ Long haul low cost carriers are provided by very few carriers in the world, as i
 The only example we have of a long haul low cost carrier is Norwegian Airlines, as they offer flights from Scandinavia to different cities in the United States.
 But this is more an exception, than the norm. For the long haul low cost carriers to survive and adapt, they must continue to innovate. Their business models should focus on three new emerging carrier types: Network, Product and Price Specialist, according to John G.Wensveen and Ryan Leick.\cite{long_haul_lcc_new_model}
 
+
 Before we look at the differences in the network parameters of these two types of airlines, there are major differences in the network architecture itself.
 While the major Full Service Airlines often have the Network Type of "Hub and Spoke", the Low Cost Carriers are known to have Point to Point Network Type, according to research by Cook G.N and Goodwin, J.\cite{airline_network_comparison}
 This "Hub and Spoke" network connection can be seen in the network graph of United Airlines and American Airlines given in Figure~\ref{fig:united_airline} and Figure~\ref{fig:american_airline} respectively. These two airlines are prime example of Full Service Airlines. 
+
 
 Similarly we see the "Point to Point" Network in Low Cost Carriers like Ryan Air in Figure~\ref{fig:ryan_air} and Southwest Airlines in Figure~\ref{fig:southwest_airline}.
 
@@ -420,6 +422,26 @@ Network of Ryan Air}
 Network of Southwest Airlines}
         \label{fig:southwest_airline}
 \end{figure}
+
+
+We can also appreciate these major differences by analyzing various parameters of the network.
+As shown in Table~\ref{Tab:distance_airlines}, we can see that the Full Service Airlines like United Airlines, American Airlines and Delta Airlines, offer routes over really long distances.
+That is the reason why the geometric distance diameters of these airline networks are easily over 12000 km.
+On the other hand, Low Cost Carriers always offer routes within a certain region, such as only within Europe (Ryan Air) or only within United States (Southwest Airlines).
+And as expected, the diameter of these airline networks are below 4000 km. 
+
+
+The differences are also apparent when we look at the mean geometric distance of all the routes offered by a particular airline.
+Full Service Carriers show an average route distance of around 2300 km, while the Low Cost Carriers show that their average route distance is about 1400 km, which is significantly lower.
+
+
+We would also like to point out the case of China Southern Airlines and China Eastern Airlines.
+Looking at only the diameter, we can conclude that the Network is as large as United or Delta Airlines.
+But when we look at the mean, they are only around 1400 km, which represent airlines like Ryanair or Southwest Airlines.
+This discrepancy can be explained by analyzing the median geometric distance of these networks.
+These Chinese Airlines have a median of around 1100 km, which means they have a lot of routes which are within China region only. 
+And looking at the full network, we can also say that, the main reason their diameter is over 12000 km is because they had recently started to offer few routes to countries like Canada, United States and Germany.
+Although these are large distances, due to high number of local routes within China, the mean route length of this network, turns out to be much more lesser and comparable to Low Cost Carriers. 
 
 \begin{table}[ht]
 \begin{center}
@@ -449,7 +471,6 @@ Network of Southwest Airlines}
 \end{center}
 \end{table}
 
-
 \begin{table}[ht]
 \begin{center}
  \begin{tabular}{| l | r | r |}
@@ -476,20 +497,57 @@ Network of Southwest Airlines}
 \end{center}
 \end{table}
 
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/eigenvector_centrality_distribution.png}
+        \caption{
+Eigenvector Centrality Distribution}
+        \label{fig:eigen_distr}
+\end{figure}
 
-\section{Airline Cooperation Portential}
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/closeness_centrality_distribution.png}
+        \caption{
+Closeness Centrality Distribution}
+        \label{fig:closeness_distr}
+\end{figure}
+
+
+\begin{figure}
+        \centering
+        \includegraphics[width=80mm]{imgs2/results/geometrical_distance_distribution.png}
+        \caption{
+Geometrical Distance Distribution}
+        \label{fig:geometric_distr}
+\end{figure}
+
+Figure~\ref{fig:geometric_distr} provides us the geometric route distance distribution for airlines United, Lufthansa, Ryanair and Southwest. Here too, there is an apparent distinction between the Full Service Airlines and the Low Cost Carriers. 	
+Ryan Air and Southwest offer so many routes around 1000 km range, that the peak of their distribution is also around that value.
+And of course, their routes stop at a maximum distance of around 4000 km. 
+Looking at the Full Service Carriers, though the global peak of the distribution of United and Lufthansa is also around the same distance of 1000 km, we can see that there is a second small peak at around 6000 km. This is nothing but the average route distance for Transatlantic flights between United States and Europe. 
+Both of these airlines offer a considerable number of these routes, that it shows in the distribution curve distinctly. 
+
+
+The centrality distributions (both eigenvector and closeness) of these four airlines also provide us with deep insights into their route network. 
+We see that in both the Figures~\ref{fig:eigen_distr} and ~\ref{fig:closeness_distr}, Ryan Air and Southwest have more airports with higher centrality value.
+We could say that the centrality of their network is distributed across many airports, instead of relying on few airports with really high centrality values. 
+The scenario of having few airports with really high centrality value is seen in the case of Full Service Airlines Lufthansa and United Airlines. They have high number of airports with low centrality, and few select airports with high centrality values.
+If we look at the network diagram that was previously shown in Figure~\ref{fig:united_airline}, it is apparent that these high centrality airports are basically the hubs of these networks.  
+
+\section{Airline Cooperation Potential}
 
 The possibility to provide convenient on-line connections to clients is an important factor that drives welfare gains through airline cooperation according to E. E. Bailey and D. Liu \cite{airline_consolidation_and_consumer_welfare}.
 
 In this paper Bailey et al. emphasize the importance of network effects for airline competition. The mention Carlton, Landes and Posner \cite{costs-and-benefits-of-airline-mergers}, who found out, that when there is an intermediate stop on a trip, consumer welfare is higher, if both segments are operated by the same airline. 
 "The connection and navigation times within the hub airport are shorter and the hassle is less than with a change of carrier" \cite{airline_consolidation_and_consumer_welfare}. 
-Think for example about the hassle that arises if you have booked two segments independently and you miss the seccond flight due to a delay of the first flight. 
+Think for example about the hassle that arises if you have booked two segments independently and you miss the second flight due to a delay of the first flight. 
 
 There is a welfare gain, when a connection from A to B could previously only be achieved by booking a flight with two different airlines, can now be achieved by booking two flights from a single airline within one ticket. 
 It is better for a consumer, to buy one ticket for a flight \mbox{A$\rightarrow$B$\rightarrow$C} from a single airline 
 Than buying two tickets for \mbox{A$\rightarrow$B} and \mbox{B$\rightarrow$C} from two distinct airlines.
 
-We construct a simple but powerfull metric that captures this welfare gain for a potential merge of two airlines $l$ and $m$. 
+We construct a simple but powerful metric that captures this welfare gain for a potential merge of two airlines $l$ and $m$. 
 
 First, we define a $\Largeness_{2}$ of an airline, that is the sum of all length-2 flights operated by this airline, weighted by the "popularity" of the two connected airports.
 We weight by the "popularity", because the welfare gain from a possibility to book a length-2 flight with a single ticket scales with the demand for this connection. 
@@ -497,7 +555,7 @@ We weight by the "popularity", because the welfare gain from a possibility to bo
 \begin{equation}
 \begin{aligned}
  & \Largeness_{2}(l) = \\
-= & \displaystyle\sum_{p,r \in P,\exists_{q}: pql \in E \and qrl \in E}: \sqrt(\patronage(p) * \patronage(r))
+= & \displaystyle\sum_{\substack{p,r \in P \\ \exists_{q}: pql \in E \and qrl \in E}}: \sqrt(\patronage(p) * \patronage(r))
 \end{aligned}
 \end{equation}
 
@@ -506,7 +564,7 @@ To assess the potential of a merge $\Potential(l,m)$ we divide the Largeness of 
 \begin{equation}
 \begin{aligned}
 & \Potential(l,m) = \\
-= & \dfrac{\Largeness_{2}(l \cup m)}{\Largeness_{2}(l) + \Largeness_{2}(m)} 
+={} & \dfrac{\Largeness_{2}(l \cup m)}{\Largeness_{2}(l) + \Largeness_{2}(m)} 
 \end{aligned}
 \end{equation}
 
@@ -529,10 +587,10 @@ With this metric at hand, we can give answers to questions like:
 "Which airlines should form alliances?" 
 
 
-We don't linger on small questions like this and jump right into reorganizing the airline alliance landscape\footnote{this wording is supposed to be funny and caricaturing. Obviously, the factors that lead to forming of alliances are incredibly diverse ranging from historical reasons to interpersonal reasons, and we do not expect that a generated alliance landscape would exactly return the real alliances landscape, that we observe today. But we are looking for meta similarities, that describe the characteristics of an alliance landscape. As we assume $\Largeness_{2}$ to be an important factor in alliance formation, we a curious to find out which similarities we will be able to spot}. We implemented an algorithm that merges one airline with another, until only $N$ are left. In each step, the two arilines $l$ and $m$ are merged, that have the highest $\Potential$.
+We don't linger on small questions like this and jump right into reorganizing the airline alliance landscape\footnote{this wording is supposed to be funny and caricaturing. Obviously, the factors that lead to forming of alliances are incredibly diverse ranging from historical reasons to interpersonal reasons, and we do not expect that a generated alliance landscape would exactly return the real alliances landscape, that we observe today. But we are looking for meta similarities, that describe the characteristics of an alliance landscape. As we assume $\Largeness_{2}$ to be an important factor in alliance formation, we a curious to find out which similarities we will be able to spot}. We implemented an algorithm that merges one airline with another, until only $N$ are left. In each step, the two airlines $l$ and $m$ are merged, that have the highest $\Potential$.
 
 We plot the result on a world map (Figure~\ref{fig:generated-alliance-map}) and compare it to the real alliance landscape (Figure~\ref{fig:real-alliance-map}. An remarkable similarity between the generated alliance landscape and the real one, is that one big alliance (green) is covering a lot of flights between the US, Europe and China, but is not much active in South America, South Africa, Australia or New Zealand. It also does not operate much in Canada in both the generated and real alliances landscape. 
-As expected, there are also differences: For example the generated alliance Landscape suggests spanish speaking South American Countries to be in the same alliance and have Brazilian oparators close to the green alliance, while in real life Buenos Aires is tied to the green alliance (Skyteam) while Brazil get's supplied by a mix of alliances. Japan for example belongs to Staralliance in the realworld while in the generated landscape it's a part of big green alliance. 
+As expected, there are also differences: For example the generated alliance Landscape suggests Spanish speaking South American Countries to be in the same alliance and have Brazilian operators close to the green alliance, while in real life Buenos Aires is tied to the green alliance (Skyteam) while Brazil gets supplied by a mix of alliances. Japan for example belongs to Staralliance in the real world while in the generated landscape it's a part of big green alliance. 
 
 \begin{figure}
 	\centering
@@ -551,11 +609,9 @@ The real alliance landscape. Skyteam(green), Staralliance(blue), Oneworld(purple
 \end{figure}
 
 \section{Outlook: Improving the metric}
-The $\Largeness$ metric could be improved. Right now, when two airlines have the same 2-segment connections, after joining the network, those connections will be counted only once. There is no clear reasoning why these overlaps should discourage a merger. 
+The $\Largeness_{2}$ metric could be improved. Right now, when two airlines have the same 2-segment connections, after joining the network, those connections will be counted only once. There is no clear reasoning why these overlaps should discourage a merger. 
 
 A very promising different approach to capturing welfare that arises from additional single-ticket multi-segment flights through a merger or cooperation between airlines, is to look at the sum of the product of the weighted eigenvector centralities of common airports of the two merge candidates. 
-
-$\cap$
 
 \begin{equation}
 \begin{aligned}
@@ -567,10 +623,30 @@ $\cap$
 where $\Nodes(l \cap m)$ are all the common nodes of airlines $l$ and $m$ and $\WEVC_{x}(p)$ is the weighted eigenvector centrality of airport $p$ in airline $x$'s subgraph. 
 The weight for calculating the weighted eigenvector centrality in the subgraph of $x$ is the sum of flows of all edges operated by the respective airline. 
 
+While reflecting about this new approach we were wondering about the correlation of eigenvalue and patronage. There is an interesting correlation as you can see in Figure~\ref{fig:patronage_eigenvector}.
+
+Thus, considering eigenvector of each airport and using it in a new metric could provide us with different results, from what we achieved through$\Largeness_{2}$ metric. 
+We should also look at the interactions in the network, from the side of airports. Airports also have a significant amount of bargaining power, since they rent their space to be used by the airlines. 
+
+
+\begin{figure}
+	\centering
+	\includegraphics[width=80mm]{imgs2/results/patronage_eigenvector.png}
+	\caption{
+	Patronage vs Eigenvector Distribution}
+\label{fig:patronage_eigenvector}
+\end{figure}
+
+In the real world, profit of each airlines also plays a major factor in the formation of alliances. The typical cost of the airlines are divided into three categories: Flight (Direct) Operating Costs as 50\%, Ground Operating Costs as 30\% and System Operating Costs as 20\%. \cite{airline_operating_cost}
+Out of the above three categories, Ground Operating Costs, are especially related to fees to be paid to airports such as aircraft landing fees and reservation charges. 
+Having a coalition with many airlines together, would increase the bargaining power of these alliances, and help in reducing the costs to be paid to these airports. 
+
+
 \section*{Acknowledgments}
-We thank our professor IProf. Ph.D. konnikova and her Sofia Berdysheva for their brilliance, support and for giving this outstanding course at TUM.
+We thank our professor Prof. Ph.D. Ikonnikova and Sofia Berdysheva for their brilliance, support and for giving this outstanding course at TUM.
 
 \bibliographystyle{IEEEtran}
 \bibliography{literature}
 
 \end{document}
+
