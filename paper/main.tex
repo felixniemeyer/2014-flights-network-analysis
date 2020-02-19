@@ -419,58 +419,28 @@ Network of Southwest Airlines}
 
 \begin{table}[ht]
 \begin{center}
- \begin{tabular}{| c | c |}
+ \begin{tabular}{| l | r | r | r |}
  \hline
- \textbf{Airline} & \textbf{Diameter (km)} \\ [0.5ex]
+ \textbf{Airline} & \textbf{Mean} & \textbf{Median} & \textbf{Diam.} \\ 
  \hline
- United Airlines & 12979 \\
- \hline
- American Airlines & 14076 \\
- \hline
- Delta Airlines & 13581 \\
- \hline
- Ryan Air & 3698 \\
- \hline
- Southwest Airlines & 3757 \\
- \hline
- Air Asia & 2914 \\
- \hline
- China Southern & 11637 \\
- \hline
- China Eastern & 11896 \\
- \hline
- \end{tabular}
-\caption{Diameter of Major Airlines}
-\label{Tab:diameter_metrics}
-\end{center}
-\end{table}
-
-
-
-\begin{table}[ht]
-\begin{center}
- \begin{tabular}{| c | c | c |}
- \hline
- \textbf{Airline} & \textbf{Mean (km)} & \textbf{Median (km)} \\ [0.5ex]
- \hline
- United Airlines & 2353.69 & 1393 \\
- \hline
- American Airlines & 2321.23 & 1371 \\
- \hline
- Delta Airlines & 2352.17 & 1341 \\
- \hline
- Ryan Air & 1490.21 & 1435.5 \\
- \hline
- Southwest Airlines & 1398.37 & 1267 \\
- \hline
- Air Asia & 1328.57 & 1254 \\
- \hline
- China Southern & 1459.95 & 1127 \\
- \hline
- China Eastern & 1427.81 & 1075 \\
+ United & 2353.69 & 1393 & 12979 \\
+ \hline   
+ American & 2321.23 & 1371 & 14076 \\
+ \hline   
+ Delta & 2352.17 & 1341 & 13581 \\
+ \hline   
+ Ryan Air & 1490.21 & 1435 & 3698 \\
+ \hline   
+ Southwest & 1398.37 & 1267 & 3757 \\
+ \hline   
+ Air Asia & 1328.57 & 1254 & 2914 \\
+ \hline   
+ Ch. Southern & 1459.95 & 1127 & 11637 \\
+ \hline   
+ Ch. Eastern & 1427.81 & 1075 & 11896 \\
  \hline
  \end{tabular}
-\caption{Distance Metrics of Major Airlines}
+\caption{Mean, Median and Diameter of subgraphs of major airlines (all numbers in kilometers)}
 \label{Tab:distance_airlines}
 \end{center}
 \end{table}
@@ -478,23 +448,23 @@ Network of Southwest Airlines}
 
 \begin{table}[ht]
 \begin{center}
- \begin{tabular}{| c | c | c |}
+ \begin{tabular}{| l | r | r |}
  \hline
  \textbf{Airline} & \textbf{Mean Flow} & \textbf{Median Flow} \\ [0.5ex]
  \hline
- United Airlines & 85159 & 43286 \\
+ United & 85159 & 43286 \\
  \hline
- American Airlines & 67983.40 & 47185 \\
+ American & 67983.40 & 47185 \\
  \hline
- Delta Airlines & 76345.95  & 47123 \\
+ Delta & 76345.95  & 47123 \\
  \hline
  Ryan Air & 31268.60 & 26857.50 \\
  \hline
- Southwest Airlines & 65692.70  & 61590 \\
+ Southwest & 65692.70  & 61590 \\
  \hline
- China Southern & 53100  & 43729.50 \\
+ Ch. Southern & 53100  & 43729.50 \\
  \hline
- China Eastern & 52610.60  & 43294 \\
+ Ch. Eastern & 52610.60  & 43294 \\
  \hline
  \end{tabular}
 \caption{Passenger Flow of Major Airlines}
@@ -568,7 +538,27 @@ Eigenvalue Centrality of China Eastern Airlines}
 
 The possibility to provide convenient on-line connections to clients is an important factor that drives welfare gains through airline cooperation according to E. E. Bailey and D. Liu \cite{airline_consolidation_and_consumer_welfare}.
 
-\section{Reality Check: Vanilla Airlines}
+In this paper Bailey et al. emphasize the importance of network effects for airline competition. The mention Carlton, Landes and Posner \cite{costs-and-benefits-of-airline-mergers}, who found out, that when there is an intermediate stop on a trip, consumer welfare is higher, if both segments are operated by the same airline. 
+"The connection and navigation times within the hub airport are shorter and the hassle is less than with a change of carrier" \cite{airline_consolidation_and_consumer_welfare}. 
+Think for example about the hassle that arises if you have booked two segments independently and you miss the seccond flight due to a delay of the first flight. 
+
+There is a welfare gain, when a connection from A to B could previously only be achieved by booking a flight with two different airlines, can now be achieved by booking two flights from a single airline within one ticket. 
+It is better for a consumer, to buy one ticket for a flight \mbox{A$\rightarrow$B$\rightarrow$C} from a single airline 
+Than buying two tickets for \mbox{A$\rightarrow$B} and \mbox{B$\rightarrow$C} from two distinct airlines.
+
+We construct a measure that captures this welfare gain for a potential merge of two airlines $l$ and $m$. 
+
+For both airports, we first caculate the sum of supported length-2 flights weighted by the "popularity" of the two connected airports, as the welfare gain scales with the demand for this connection. 
+
+\begin{equation}
+L2Largeness(airline) = \sum{
+\end{equation}
+
+\begin{equation}
+Opportunity = 
+\end{equation}
+
+\section{Outlook: Improving the metric}
 
 
 \section*{Acknowledgments}
