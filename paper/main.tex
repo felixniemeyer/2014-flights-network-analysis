@@ -86,7 +86,7 @@ This script and also all other code we have written for this project can be foun
 
 \section{Data Enrichment \& Estimation}
 After cleaning up the data, there are 3139 airports. 
-Interpreting the data as a graph gives us a multi-edge directed graph).
+Interpreting the data as a graph gives us a multi-edge directed graph.
 Looking at the degree distribution in Figure~\ref{fig:degree_distribution}, the alternating characteristic of degrees strikes the eye. It comes from the fact, that it's very uncommon for a connection between airports to exist only in one direction. Thus, there is much fewer nodes with odd degrees than than with even degrees. 
 
 When we disregard odd degrees, the seemingly linear distribution on a log log scale becomes apparent. Using least square (scipy.optimize.curve\_fit), we optimize parameters $c$ and $\gamma$ as you can see in Figure~\ref{fig:degree_distribution_curves}
@@ -108,7 +108,7 @@ Looking at even degrees only. Trying least square curve fitting to find suitable
 \end{figure}
 
 Besides the main subgraph, that includes 3113 nodes, there are 6 small disconnected ones with only a couple of nodes.
-One with 10 nodes for example Figure~\ref{fig:new_caledonia}, consists only of airports that are located in New Caledonia, an archipelago in the Pacific Ocean. 
+One with 10 nodes for example, Figure~\ref{fig:new_caledonia}, consists only of airports that are located in New Caledonia, an archipelago in the Pacific Ocean. 
 \begin{figure}
 	\centering
 	\includegraphics[width=76mm]{imgs/new-caledonia-subgraph.png}
@@ -117,7 +117,7 @@ One with 10 nodes for example Figure~\ref{fig:new_caledonia}, consists only of a
 \end{figure}
 
 In order to enable us to do more meaningful analysis, we enrich the dataset with additional information. We chose the airport patronage and found out, that we can get this data from Wikidata. 
-For 1956 of the 3139 airports from the dataset, we can find patronage data from Wikidata. Get an impression about the regional differences of data availability by looking at the percentage of airports for which Wikidata yields a patronage in Table~\ref{tab:patr_av_most_airports} and Table~\ref{tab:patr_av_worst}.
+For 1956 of the 3139 airports from the dataset, we can find patronage data from Wikidata. We can also get an impression about the regional differences of data availability, by looking at the percentage of airports for which Wikidata yields a patronage in Table~\ref{tab:patr_av_most_airports} and Table~\ref{tab:patr_av_worst}.
 \begin{table}[h]
 	\centering
 	\caption{patronage data availability on Wikidata for countries with the most airports}
@@ -158,15 +158,17 @@ For 1956 of the 3139 airports from the dataset, we can find patronage data from 
 		Algeria & 26 & 19.2\%\\ \hline
 	\end{tabular}
 \end{table}
-We need to distinguish between monthly and yearly values and we extrapolate 2014 data from close years in case no data for the year 2014. 
+We need to distinguish between monthly and yearly values and we extrapolate 2014 data from close years in case there is no data for the year 2014. 
 In order to populate the remaining nodes with reasonable patronages as well, we tried different techniques. 
+
+
 First we used data about runway surfaces that we found on ourflights.org. 
+We summed up the surfaces of runways for every airport and then calculated the average ratio between total runway surface area and patronage of airports where both data points were present, in order to predict patronage for airports without patronage data but with runway surface data based on this average ratio. 
+For the still remaining >1000 airports without patronage we would then apply a default value that equals the average of the smallest 1\% of airports with patronage data from Wikidata. 
+The runway data turned out to be very unclean and unreliable. Water runways and other quirks were distorting the predictions. 
 
-We summed up the surfaces of runways for every airport and then calculated the average ratio between total runway surface area and patronage of airports where both data points were present, in order to predict patronage for airports without patronage data but with runway surface data based on this average ratio. For the still remaining >1000 airports without patronage we would then apply a default value that equals the average of the smallest 1\% of airports with patronage data from Wikidata. 
-The runway data turned out to be very unclean and unreliably. Water runways and other quirks were distorting the predictions. 
-
-Inspired by Prof. Ikonnikova advice during the presentation we switched to estimating the remaining airport patronages by looking at neighboring airports with patronage data. The Algorithm can be seen in Listing~\ref{lst:patronage_estimation_algorithm}.
-\begin{lstlisting}[language=Python, caption={Patronage estimation algorithm, that using neighboring airport's patronage data}, label=lst:patronage_estimation_algorithm]
+Inspired by Prof. Ikonnikova's advice during the presentation we switched to estimating the remaining airport patronages by looking at neighboring airports with patronage data. The Algorithm can be seen in Listing~\ref{lst:patronage_estimation_algorithm}.
+\begin{lstlisting}[language=Python, caption={Patronage estimation algorithm, that uses neighboring airport's patronage data}, label=lst:patronage_estimation_algorithm]
 G = loadEntireNetwork()
 pr = -1 #previous remaining
 r = 0   #remaining
@@ -201,7 +203,7 @@ This second approach yields much nicer estimations, as we will see after estimat
 
 After estimating missing patronage data by looking at neighboring airports patronages, 14 airports without patronage remain. These must be in airports in disconnected subgraphs, because the algorithm would eventually reach them and assign a patronage otherwise. Investigations confirm that. We disregard these few data-less airports from disconnected subgraphs in the following analyses and thus end up with a network of 3125 airports. 
 
-The flows are estimated by choosing reasonable initial values and then applying corrections iteratively to approach a situation where the sum of the estimated flows for each airport equal its patronage value.
+The flows are estimated by choosing reasonable initial values and then applying corrections iteratively to approach a situation where the sum of the estimated elows for each airport equal its patronage value.
 The average initial values for an edge between airport $p$ and $q$ is chosen as: 
 
 
@@ -250,13 +252,12 @@ where the $\PNWS(pq)$ (Pre Normalization Weight Sum) is just the sum of the non-
 where $\degree_l(p)$ is the degree of airport $p$ in airline $l$'s subgraph, i.e. number of edges from and to airport $p$ operated by airline $l$.
 
 The ratios we choose here will stay intact over the course of the iterations in the next part of the algorithm.
-In every iteration, we traverse all airports and for every airport we calculate the sum of current flows values of all routes. 
+In every iteration, we traverse all airports and for every airport we calculate the sum of current flow values of all routes. 
 \begin{equation}
 \begin{aligned}
 \flowSum(p) = \displaystyle\sum_{pql \in E \cup pu \in E}\flow_{pql}
 \end{aligned}
 \end{equation}
-Difference between the patronage and the current sum of passenger flows of incoming and outgoing routes. 
 Then, for each airport we calculate the difference between its patronage and the current sum of flows.
 \begin{equation}
 \begin{aligned}
@@ -284,11 +285,11 @@ In order to look at the results of this algorithm we introduce a measure
 \begin{equation}
 \flowDeviation(p) = ln\left(\dfrac{\flowSum(p)}{\patronage(p)}\right)
 \end{equation}
-it expresses how well the sum of estimated flows match the patronage, that we know for the airport. If the flows are half the patronage the absolute value of $\flowDeviation$ will be the same as when the current flows are twice the actual patronage number. 
+It expresses how well the sum of estimated flows match the patronage, that we know for the airport. If the flows are half the patronage the absolute value of $\flowDeviation$ will be the same as when the current flows are twice the actual patronage number. 
 We compare the results between estimating the patronages based on the runway sizes Figure~\ref{fig:flow_deviation_runway} and estimating the patronages based on neighboring airports Figure~\ref{fig:flow_deviation}. 
 The blue line shows the $\flowDeviation$ distribution of the initial flow values.
-The other lines show the $\flowDeviation$ distribution after a the first couple of iterations and after the final iteration. 
-In the case of patronage estimations based on neighboring airports, we see that the $\flowDeviation$ distribution after the 120th iteration comes very close to $y=0$ which is also reflected by the $sum(abs)$ in the legend which is the sum of the absolute value of $\flowDeviation$ over all airports which is $0.94$ in this case.
+The other lines show the $\flowDeviation$ distribution after the first couple of iterations and after the final iteration. 
+In the case of patronage estimations based on neighboring airports, we see that the $\flowDeviation$ distribution after the 120th iteration comes very close to $y=0$ which is also reflected by the $sum(abs)$ in the legend, which is the sum of the absolute value of $\flowDeviation$ over all airports which is $0.94$ in this case.
 
 The bad results of the estimations when estimating patronage values from runways stem from constellations like in Figure~\ref{fig:impossible_flows}, when choosing flows to match the patronage values are impossible. 
 The constellation that accounts for $>0.88$ of the $\flowDeviation$ sum $0.94$ in the scenario where patronages are estimated based on neighboring airports is shown in Figure~\ref{fig:worst_flow_fit}. 
@@ -539,7 +540,7 @@ If we look at the network diagram that was previously shown in Figure~\ref{fig:u
 
 The possibility to provide convenient on-line connections to clients is an important factor that drives welfare gains through airline cooperation according to E. E. Bailey and D. Liu \cite{airline_consolidation_and_consumer_welfare}.
 
-In this paper Bailey et al. emphasize the importance of network effects for airline competition. The mention Carlton, Landes and Posner \cite{costs-and-benefits-of-airline-mergers}, who found out, that when there is an intermediate stop on a trip, consumer welfare is higher, if both segments are operated by the same airline. 
+In this paper Bailey et al. emphasize the importance of network effects for airline competition. They mention Carlton, Landes and Posner \cite{costs-and-benefits-of-airline-mergers}, who found out, that when there is an intermediate stop on a trip, consumer welfare is higher, if both segments are operated by the same airline. 
 "The connection and navigation times within the hub airport are shorter and the hassle is less than with a change of carrier" \cite{airline_consolidation_and_consumer_welfare}. 
 Think for example about the hassle that arises if you have booked two segments independently and you miss the second flight due to a delay of the first flight. 
 
@@ -559,7 +560,7 @@ We weight by the "popularity", because the welfare gain from a possibility to bo
 \end{aligned}
 \end{equation}
 
-To assess the potential of a merge $\Potential(l,m)$ we divide the Largeness of the joint airline network by the sum of the Largenesses of the separate airline networks. 
+To assess the potential of a merge, we divide the Largeness of the joint airline network by the sum of the Largenesses of the separate airline networks. 
 
 \begin{equation}
 \begin{aligned}
@@ -568,7 +569,7 @@ To assess the potential of a merge $\Potential(l,m)$ we divide the Largeness of 
 \end{aligned}
 \end{equation}
 
-Imagine the merge of two airlines yields many new 2-segment flight routes (look at the example in Figure~\ref{fig:potential-example}. If there is already a big overlap between the networks, $\Potential(l,m)$ might even be $< 1$ and thus discourage a merger or cooperation\footnote{this aspect of the $\Largeness$ metric might deserve criticism. See section "Outlook" for details.} 
+Imagine the merge of two airlines yields many new 2-segment flight routes (look at the example in Figure~\ref{fig:potential-example}). If there is already a big overlap between the networks, $\Potential(l,m)$ might even be $< 1$ and thus discourage a merger or cooperation\footnote{this aspect of the $\Largeness$ metric might deserve criticism. See section "Outlook" for details.} 
 
 \begin{figure}
 	\centering
@@ -584,12 +585,13 @@ Because airlines from the same alliance can offer 2-segment flights in one ticke
 With this metric at hand, we can give answers to questions like: 
 
 "Which alliance should airline X join?"
+
 "Which airlines should form alliances?" 
 
 
 We don't linger on small questions like this and jump right into reorganizing the airline alliance landscape\footnote{this wording is supposed to be funny and caricaturing. Obviously, the factors that lead to forming of alliances are incredibly diverse ranging from historical reasons to interpersonal reasons, and we do not expect that a generated alliance landscape would exactly return the real alliances landscape, that we observe today. But we are looking for meta similarities, that describe the characteristics of an alliance landscape. As we assume $\Largeness_{2}$ to be an important factor in alliance formation, we a curious to find out which similarities we will be able to spot}. We implemented an algorithm that merges one airline with another, until only $N$ are left. In each step, the two airlines $l$ and $m$ are merged, that have the highest $\Potential$.
 
-We plot the result on a world map (Figure~\ref{fig:generated-alliance-map}) and compare it to the real alliance landscape (Figure~\ref{fig:real-alliance-map}. An remarkable similarity between the generated alliance landscape and the real one, is that one big alliance (green) is covering a lot of flights between the US, Europe and China, but is not much active in South America, South Africa, Australia or New Zealand. It also does not operate much in Canada in both the generated and real alliances landscape. 
+We plot the result on a world map (Figure~\ref{fig:generated-alliance-map}) and compare it to the real alliance landscape (Figure~\ref{fig:real-alliance-map}. A remarkable similarity between the generated alliance landscape and the real one, is that one big alliance (green) is covering a lot of flights between the US, Europe and China, but is not much active in South America, South Africa, Australia or New Zealand. It also does not operate much in Canada in both the generated and real alliances landscape. 
 As expected, there are also differences: For example the generated alliance Landscape suggests Spanish speaking South American Countries to be in the same alliance and have Brazilian operators close to the green alliance, while in real life Buenos Aires is tied to the green alliance (Skyteam) while Brazil gets supplied by a mix of alliances. Japan for example belongs to Staralliance in the real world while in the generated landscape it's a part of big green alliance. 
 
 \begin{figure}
@@ -643,7 +645,7 @@ Having a coalition with many airlines together, would increase the bargaining po
 
 
 \section*{Acknowledgments}
-We thank our professor Prof. Ph.D. Ikonnikova and Sofia Berdysheva for their brilliance, support and for giving this outstanding course at TUM.
+We thank our professor Prof. Ikonnikova and Sofia Berdysheva for their brilliance, support and for giving this outstanding course at TUM. 
 
 \bibliographystyle{IEEEtran}
 \bibliography{literature}
