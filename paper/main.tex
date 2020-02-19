@@ -46,6 +46,8 @@
 \DeclareMathOperator{\flowSum}{flowSum}
 \DeclareMathOperator{\flowDeviation}{flowDeviation}
 \DeclareMathOperator{\flowDiff}{flowDiff}
+\DeclareMathOperator{\Largeness}{Largeness}
+\DeclareMathOperator{\Potential}{Potential}
 
 \begin{document}
 
@@ -546,16 +548,19 @@ There is a welfare gain, when a connection from A to B could previously only be 
 It is better for a consumer, to buy one ticket for a flight \mbox{A$\rightarrow$B$\rightarrow$C} from a single airline 
 Than buying two tickets for \mbox{A$\rightarrow$B} and \mbox{B$\rightarrow$C} from two distinct airlines.
 
-We construct a measure that captures this welfare gain for a potential merge of two airlines $l$ and $m$. 
+We construct a metric that captures this welfare gain for a potential merge of two airlines $l$ and $m$. 
 
-For both airports, we first caculate the sum of supported length-2 flights weighted by the "popularity" of the two connected airports, as the welfare gain scales with the demand for this connection. 
+First, we define a $\Largeness_{2}$ of an airline, that is the sum of all length-2 flights operated by this airline, weighted by the "popularity" of the two connected airports.
+We weight by the "popularity", because the welfare gain from a possibility to book a length-2 flight with a single ticket scales with the demand for this connection. 
 
 \begin{equation}
-L2Largeness(airline) = \sum{
+\Largeness_{2}(l) = \sum{p,r \in P,\exists_{q}: pql \in E \and qrl \in E}: \sqrt(\patronage(p) * \patronage(r))
 \end{equation}
 
+To assess the potential of a merge $\Potential(l,m)$ we divide the Largeness of the joint airline network by the sum of the Largenesses of the separate airline networks. 
+
 \begin{equation}
-Opportunity = 
+\Potential(l,m) = \dfrac{\Largeness_{2}(l \cup m)}{\Largeness_{2}(l) + \Largeness_{2}(m)} 
 \end{equation}
 
 \section{Outlook: Improving the metric}
