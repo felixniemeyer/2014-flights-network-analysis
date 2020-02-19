@@ -1,3 +1,4 @@
+import os
 import sys
 import networkx as nx
 import concurrent.futures
@@ -34,12 +35,16 @@ def calculateOpportunity(matrix, a, b):
 	matrix[a][b] = lc / ( la + lb ) 
 
 print('creating initial single member alliances') 
-real_alliance_names = ['oneworld', 'skyteam', 'staralliance', 'vanilla']
-for alliance_name in real_alliance_names: 
-	f = open("../data/alliances/" + alliance_name)
-	for airline_id in map(lambda line: line.strip(), f): 
-		alliance = Alliance(loadAirlineNetwork(airline_id), airline_id) 
-		alliances[alliance.name()] = alliance
+folder = "../data/alliances"
+real_alliance_names = []
+for f in os.listdir(folder):
+	if os.path.isfile(folder + '/' + f): 
+		real_alliance_names.append(f)
+		print(f) 
+		f = open(folder + '/' + f)
+		for airline_id in map(lambda line: line.strip(), f): 
+			alliance = Alliance(loadAirlineNetwork(airline_id), airline_id) 
+			alliances[alliance.name()] = alliance
 
 opportunity_matrix = {}
 keys = list(alliances.keys())
@@ -99,11 +104,16 @@ while len(keys) > 4:
 
 	opportunity_matrix[i] = new_opportunities[i]
 
-print('\nresults:')
+result_folder = 'results/alliances'
+os.makedirs(result_folder, exist_ok=True) 
+for f in os.listdir(result_folder):
+	os.remove(result_folder + '/' + f) 
 index = 0
 for key in alliances: 
-	print('alliance', index) 
+	f = open(result_folder + ('/gen%i' % index), 'w')
 	index += 1
 	for airline_id in alliances[key].airlines: 
-		print('-', airline_id) 
+		f.write(airline_id + '\n') 
 
+for key in alliances: 
+	f.flush()
