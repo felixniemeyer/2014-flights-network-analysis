@@ -33,7 +33,7 @@
 \affil[1]{felix.niemeyer@tum.de, MiM}
 \affil[2]{saicharan.kumar@tum.de, MiM}
 
-\date{Received: 19.02.2020 - This is work in progress}
+\date{Handed in on 19.02.2020}
 
 % for the equation stuff 
 \DeclareMathOperator{\avgFlow}{avgFlow}
@@ -62,7 +62,8 @@ We estimate some missing data.
 Starting from there, we analyze some network characteristics for the whole network as well as airline-specific sub-networks.
 We compare airline-specific networks and find relations between their network's characteristics and their business model.
 We propose one metric that plays a role in forecasting whether a cooperation between two airlines is advantageous and use this metric to generate an alliances landscape.
-We compare it's predictive correctness to the real world by looking at the formation of Vanilla Airlines which occurred in the year after the one our data stems from.
+We compare it's predictive correctness to the real world. 
+We criticise the proposed metric and present a different approach. 
 \end{abstract}
 
 \section{Data Description}
@@ -333,12 +334,12 @@ Arvidsjaur Airport is only connected to Lycksele Airport but has a more than twi
 
 \section{Basic Network Analysis}
 Initially, we would like to analyze the entire worldwide airline network, and provide some insights regarding the airline industry.
-Since a particular route could be provided by multiple Airline Companies, the final network that we come up with is a Multiple Directed Network.
-The attributes of each edge in this network included both the geometrical distance and the average passenger flow of that route (edge). 
-As we can see from the Table~\ref{Tab:distance_metrics}, the diameter of the entire network is given along with the Total Distance of the routes and the Average Distance of routes in a network.  
+Since a particular route could be provided by multiple airline companies, the final network that we come up with is a multiple directed network.
+After enrichment the attributes of each edge in this network include both the geometrical distance and the average passenger flow of that route (edge). 
+As we can see from the Table~\ref{Tab:distance_metrics}, the diameter of the entire network is given along with the total distance of the routes and the average distance of routes in a network.  
 
-\begin{center}
 \begin{table}[ht]	
+\begin{center}
  \begin{tabular}{| c | c | c |}
  \hline
  \textbf{Diameter} & \textbf{Total Dist.} & \textbf{Average Dist.} \\ 
@@ -346,13 +347,12 @@ As we can see from the Table~\ref{Tab:distance_metrics}, the diameter of the ent
  18834 & 126681574 & 1889.72 \\
  \hline
  \end{tabular}
-\caption{Distance Metrics of the Network in km}
+\caption{Distance metrics of the network in km}
 \label{Tab:distance_metrics}	 
-\end{table}
 \end{center}
+\end{table}
 
-We currently do not have the ability to calculate centrality parameters like Eigenvector, Closeness or betweenness Centrality for a Multidirected Graph. So we will be mainly looking at Degree Centrality of the entire network as shown in Figure~\ref{fig:degree_centrality}.
-This is because Degree Centrality is the only Centrality available for Multiple Directed Graphs.
+For a multi directed graph, most centrality measures except degree centrality (Figure~\ref{fig:degree_centrality}) are not defined. 
 
 \begin{figure}
         \centering
@@ -367,15 +367,17 @@ The degree centrality is given by the formula:
 	Degree Centrality=d_i/(n-1)
 \end{equation}
 
-Just by analyzing the graph, we can say that the degree centrality distribution is following the Power Law Distribution.
+However, a multi directed graph can be converted to a directed graph, by merging the edges. 
+
+Just by analyzing the graph, we can say that the degree centrality distribution is following the power law distribution.
 
 \section{Airline Subgraph Analysis \& Comparison}
 
-Airline Networks can be mainly divided into two different types of networks. Full Service Airlines which are also called as Legacy Carriers, and Low Cost Airlines or Low Cost Carriers.  
-Full Service Airlines generally provide free baggage allowance, meals, drinks, seat selection and in-flight entertainment at no extra charge.
-Low Cost Carriers will usually collect ancillary revenue for all or most of the above these amenities.
-Most of the time, Low Cost Carriers operate in a specific regions.
-These specific regions could be within countries, or within continents, or within specific part of the continents.
+Airline networks can be mainly divided into two different types of networks. Full service airlines which are also called legacy carriers, and low cost airlines or low cost carriers.  
+Full service airlines generally provide free baggage allowance, meals, drinks, seat selection and in-flight entertainment at no extra charge.
+Low cost carriers will usually collect ancillary revenue for all or most of the these amenities.
+Most of the time, low cost carriers operate in a specific regions.
+These specific regions could be within countries, within continents, or within specific parts of the continents.
 
 \begin{figure}
         \centering
@@ -397,21 +399,21 @@ Network of American Airlines}
 
 Long haul low cost carriers are provided by very few carriers in the world, as it is not feasible to offer long routes with low cost and also high frequency, according to Robert L. Candall, former CEO of American Airlines.\cite{long_haul_lcc_model}
 The only example we have of a long haul low cost carrier is Norwegian Airlines, as they offer flights from Scandinavia to different cities in the United States.
-But this is more an exception, than the norm. For the long haul low cost carriers to survive and adapt, they must continue to innovate. Their business models should focus on three new emerging carrier types: Network, Product and Price Specialist, according to John G.Wensveen and Ryan Leick.\cite{long_haul_lcc_new_model}
+But this is more an exception, than the norm. For the long haul low cost carriers to survive and adapt, they must continue to innovate. Their business models should focus on three new emerging carrier types: network, product and price Specialist, according to John G.Wensveen and Ryan Leick.\cite{long_haul_lcc_new_model}
 
 
 Before we look at the differences in the network parameters of these two types of airlines, there are major differences in the network architecture itself.
-While the major Full Service Airlines often have the Network Type of "Hub and Spoke", the Low Cost Carriers are known to have Point to Point Network Type, according to research by Cook G.N and Goodwin, J.\cite{airline_network_comparison}
-This "Hub and Spoke" network connection can be seen in the network graph of United Airlines and American Airlines given in Figure~\ref{fig:united_airline} and Figure~\ref{fig:american_airline} respectively. These two airlines are prime example of Full Service Airlines. 
+While the major full service airlines often have the network type of "Hub and Spoke", the low cost carriers are known to have "Point to Point" network type, according to research by Cook G.N and Goodwin, J.\cite{airline_network_comparison}
+This "Hub and Spoke" network connection can be seen in the network graph of United Airlines and American Airlines given in Figure~\ref{fig:united_airline} and Figure~\ref{fig:american_airline} respectively. These two airlines are prime example of full service airlines. 
 
 
-Similarly we see the "Point to Point" Network in Low Cost Carriers like Ryan Air in Figure~\ref{fig:ryan_air} and Southwest Airlines in Figure~\ref{fig:southwest_airline}.
+Similarly we see the "Point to Point" Network in low cost carriers like Ryan Air in Figure~\ref{fig:ryan_air} and Southwest Airlines in Figure~\ref{fig:southwest_airline}.
 
 \begin{figure}
         \centering
         \includegraphics[width=80mm]{imgs2/ryan_air_network.png}
         \caption{
-Network of Ryan Air}
+Network of Ryanair}
         \label{fig:ryan_air}
 \end{figure}
 
@@ -424,24 +426,24 @@ Network of Southwest Airlines}
 \end{figure}
 
 
-We can also appreciate these major differences by analyzing various parameters of the network.
-As shown in Table~\ref{Tab:distance_airlines}, we can see that the Full Service Airlines like United Airlines, American Airlines and Delta Airlines, offer routes over really long distances.
+We can also notice these major differences by analyzing various parameters for airline subgraphs.
+As shown in Table~\ref{Tab:distance_airlines}, we can see that the full service airlines like United Airlines, American Airlines and Delta Airlines, offer routes over really long distances.
 That is the reason why the geometric distance diameters of these airline networks are easily over 12000 km.
-On the other hand, Low Cost Carriers always offer routes within a certain region, such as only within Europe (Ryan Air) or only within United States (Southwest Airlines).
+On the other hand, low cost carriers offer routes within a certain region, such as within Europe (Ryan Air) or within the United States (Southwest Airlines).
 And as expected, the diameter of these airline networks are below 4000 km. 
 
 
 The differences are also apparent when we look at the mean geometric distance of all the routes offered by a particular airline.
-Full Service Carriers show an average route distance of around 2300 km, while the Low Cost Carriers show that their average route distance is about 1400 km, which is significantly lower.
+Full service carriers show an average route distance of around 2300 km, while the low cost carriers show that their average route distance is about 1400 km, which is significantly lower.
 
 
 We would also like to point out the case of China Southern Airlines and China Eastern Airlines.
-Looking at only the diameter, we can conclude that the Network is as large as United or Delta Airlines.
-But when we look at the mean, they are only around 1400 km, which represent airlines like Ryanair or Southwest Airlines.
+The diameter of those two airlines is as large as the one of United or Delta Airlines. 
+But when we look at the mean distances of the those two Chinese airlines, they are only around 1400 km, which is common for airlines like Ryanair or Southwest Airlines.
 This discrepancy can be explained by analyzing the median geometric distance of these networks.
 These Chinese Airlines have a median of around 1100 km, which means they have a lot of routes which are within China region only. 
 And looking at the full network, we can also say that, the main reason their diameter is over 12000 km is because they had recently started to offer few routes to countries like Canada, United States and Germany.
-Although these are large distances, due to high number of local routes within China, the mean route length of this network, turns out to be much more lesser and comparable to Low Cost Carriers. 
+Although these are large distances, due to the high number of local routes within China, the mean route length of this network, turns out to be much lesser and comparable to low cost carriers. 
 
 \begin{table}[ht]
 \begin{center}
@@ -466,7 +468,7 @@ Although these are large distances, due to high number of local routes within Ch
  Ch. Eastern & 1427.81 & 1075 & 11896 \\
  \hline
  \end{tabular}
-\caption{Mean, Median and Diameter of subgraphs of major airlines (all numbers in kilometers)}
+\caption{Mean, median and diameter of subgraphs of major airlines (all numbers in km)}
 \label{Tab:distance_airlines}
 \end{center}
 \end{table}
@@ -492,7 +494,7 @@ Although these are large distances, due to high number of local routes within Ch
  Ch. Eastern & 52610.60  & 43294 \\
  \hline
  \end{tabular}
-\caption{Passenger Flow of Major Airlines}
+\caption{Passenger flow of major airlines}
 \label{Tab:passenger_flow_airlines}
 \end{center}
 \end{table}
@@ -501,7 +503,7 @@ Although these are large distances, due to high number of local routes within Ch
         \centering
         \includegraphics[width=80mm]{imgs2/results/eigenvector_centrality_distribution.png}
         \caption{
-Eigenvector Centrality Distribution}
+Eigenvector centrality distribution}
         \label{fig:eigen_distr}
 \end{figure}
 
@@ -509,7 +511,7 @@ Eigenvector Centrality Distribution}
         \centering
         \includegraphics[width=80mm]{imgs2/results/closeness_centrality_distribution.png}
         \caption{
-Closeness Centrality Distribution}
+Closeness centrality distribution}
         \label{fig:closeness_distr}
 \end{figure}
 
@@ -518,21 +520,21 @@ Closeness Centrality Distribution}
         \centering
         \includegraphics[width=80mm]{imgs2/results/geometrical_distance_distribution.png}
         \caption{
-Geometrical Distance Distribution}
+Geometrical distance distribution}
         \label{fig:geometric_distr}
 \end{figure}
 
-Figure~\ref{fig:geometric_distr} provides us the geometric route distance distribution for airlines United, Lufthansa, Ryanair and Southwest. Here too, there is an apparent distinction between the Full Service Airlines and the Low Cost Carriers. 	
-Ryan Air and Southwest offer so many routes around 1000 km range, that the peak of their distribution is also around that value.
+Figure~\ref{fig:geometric_distr} provides us the geometric route distance distribution for airlines United, Lufthansa, Ryanair and Southwest. Here too, there is an apparent distinction between the full service airlines and the low cost carriers. 	
+Ryanair and Southwest offer so many routes around 1000 km range, that the peak of their distribution is also around that value.
 And of course, their routes stop at a maximum distance of around 4000 km. 
-Looking at the Full Service Carriers, though the global peak of the distribution of United and Lufthansa is also around the same distance of 1000 km, we can see that there is a second small peak at around 6000 km. This is nothing but the average route distance for Transatlantic flights between United States and Europe. 
+Looking at the full service carriers, though the global peak of the distribution of United and Lufthansa is also around the same distance of 1000 km, we can see that there is a second small peak at around 6000 km. This is to a big extetent caused by transatlantic flights between United States and Europe. 
 Both of these airlines offer a considerable number of these routes, that it shows in the distribution curve distinctly. 
 
 
 The centrality distributions (both eigenvector and closeness) of these four airlines also provide us with deep insights into their route network. 
 We see that in both the Figures~\ref{fig:eigen_distr} and ~\ref{fig:closeness_distr}, Ryan Air and Southwest have more airports with higher centrality value.
 We could say that the centrality of their network is distributed across many airports, instead of relying on few airports with really high centrality values. 
-The scenario of having few airports with really high centrality value is seen in the case of Full Service Airlines Lufthansa and United Airlines. They have high number of airports with low centrality, and few select airports with high centrality values.
+The scenario of having few airports with really high centrality value is seen in the case of full service airlines Lufthansa and United Airlines. They have a high number of airports with low centrality, and a few select airports with high centrality values.
 If we look at the network diagram that was previously shown in Figure~\ref{fig:united_airline}, it is apparent that these high centrality airports are basically the hubs of these networks.  
 
 \section{Airline Cooperation Potential}
@@ -589,8 +591,8 @@ With this metric at hand, we can give answers to questions like:
 
 We don't linger on small questions like this and jump right into reorganizing the airline alliance landscape\footnote{this wording is supposed to be funny and caricaturing. Obviously, the factors that lead to forming of alliances are incredibly diverse ranging from historical reasons to interpersonal reasons, and we do not expect that a generated alliance landscape would exactly return the real alliances landscape, that we observe today. But we are looking for meta similarities, that describe the characteristics of an alliance landscape. As we assume $\Largeness_{2}$ to be an important factor in alliance formation, we a curious to find out which similarities we will be able to spot}. We implemented an algorithm that merges one airline with another, until only $N$ are left. In each step, the two airlines $l$ and $m$ are merged, that have the highest $\Potential$.
 
-We plot the result on a world map (Figure~\ref{fig:generated-alliance-map}) and compare it to the real alliance landscape (Figure~\ref{fig:real-alliance-map}. An remarkable similarity between the generated alliance landscape and the real one, is that one big alliance (green) is covering a lot of flights between the US, Europe and China, but is not much active in South America, South Africa, Australia or New Zealand. It also does not operate much in Canada in both the generated and real alliances landscape. 
-As expected, there are also differences: For example the generated alliance Landscape suggests Spanish speaking South American Countries to be in the same alliance and have Brazilian operators close to the green alliance, while in real life Buenos Aires is tied to the green alliance (Skyteam) while Brazil gets supplied by a mix of alliances. Japan for example belongs to Staralliance in the real world while in the generated landscape it's a part of big green alliance. 
+We plot the result on a world map (Figure~\ref{fig:generated-alliance-map}) and compare it to the real alliance landscape (Figure~\ref{fig:real-alliance-map}. An remarkable similarity between the generated alliance landscape and the real one, is that one big alliance (the green alliance) is covering a lot of flights between the US, Europe and China, but is not much active in South America, South Africa, Australia or New Zealand. It also does not operate much in Canada in both the generated and real alliances landscape. 
+As expected, there are also differences: For example the generated alliance Landscape suggests Spanish speaking South American Countries to be in the same alliance and have Brazilian operators that are mostly part of the green alliance, while in real life Buenos Aires is tied to the Skyteam while Brazil gets supplied by a mix of alliances. Japan for example belongs to Staralliance in the real world while in the generated landscape it's a part of the green alliance. 
 
 \begin{figure}
 	\centering
@@ -625,10 +627,6 @@ The weight for calculating the weighted eigenvector centrality in the subgraph o
 
 While reflecting about this new approach we were wondering about the correlation of eigenvalue and patronage. There is an interesting correlation as you can see in Figure~\ref{fig:patronage_eigenvector}.
 
-Thus, considering eigenvector of each airport and using it in a new metric could provide us with different results, from what we achieved through$\Largeness_{2}$ metric. 
-We should also look at the interactions in the network, from the side of airports. Airports also have a significant amount of bargaining power, since they rent their space to be used by the airlines. 
-
-
 \begin{figure}
 	\centering
 	\includegraphics[width=80mm]{imgs2/results/patronage_eigenvector.png}
@@ -637,10 +635,10 @@ We should also look at the interactions in the network, from the side of airport
 \label{fig:patronage_eigenvector}
 \end{figure}
 
-In the real world, profit of each airlines also plays a major factor in the formation of alliances. The typical cost of the airlines are divided into three categories: Flight (Direct) Operating Costs as 50\%, Ground Operating Costs as 30\% and System Operating Costs as 20\%. \cite{airline_operating_cost}
-Out of the above three categories, Ground Operating Costs, are especially related to fees to be paid to airports such as aircraft landing fees and reservation charges. 
-Having a coalition with many airlines together, would increase the bargaining power of these alliances, and help in reducing the costs to be paid to these airports. 
 
+With more data and especially financial data, there are million ways to explore and develop comprehensive models for assessing alliance forming and cooperation potential. 
+
+Also, the interplay between airlines and between airlines and airport operators could be investigated from a game theoretic perspective in future work. 
 
 \section*{Acknowledgments}
 We thank our professor Prof. Ph.D. Ikonnikova and Sofia Berdysheva for their brilliance, support and for giving this outstanding course at TUM.
